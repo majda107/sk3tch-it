@@ -1,0 +1,12 @@
+.drawarea {
+    height: 540px;
+    background-color: red;
+}
+
+.chat {
+    height: 260px;
+}
+
+.lobbies {
+    border: 1px solid black;
+}

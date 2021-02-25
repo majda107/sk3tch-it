@@ -1,11 +1,18 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import { LobbyComponent } from './components/Lobby';
+import { CreateSignalrContext, SignalrContext } from './context/signalr.context';
+
+import "./services/connection.service";
 
 function App() {
+
+  const ctx = CreateSignalrContext();
+
   return (
     <div className="App">
-      <header className="App-header">
+      {/* <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
           Edit <code>src/App.tsx</code> and save to reload.
@@ -18,8 +25,11 @@ function App() {
         >
           Learn React
         </a>
-      </header>
-    </div>
+      </header> */}
+      <SignalrContext.Provider value={ctx} >
+        <LobbyComponent />
+      </SignalrContext.Provider>
+    </div >
   );
 }
 

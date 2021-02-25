@@ -12,6 +12,7 @@ using Sk3tchIt.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Sk3tchIt.Hubs;
 
 namespace Sk3tchIt
 {
@@ -27,6 +28,20 @@ namespace Sk3tchIt
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(o =>
+            {
+                o.AddPolicy("NoCors", b =>
+                {
+                    b
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        // .AllowAnyOrigin()
+                        .WithOrigins("http://localhost:3000")
+                        .AllowCredentials();
+                });
+            });
+
+
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlite(
                     Configuration.GetConnectionString("DefaultConnection")));
@@ -36,11 +51,7 @@ namespace Sk3tchIt
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddControllersWithViews();
 
-
-            services.AddCors(o =>
-            {
-                o.AddPolicy("NoCors", b => { b.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin(); });
-            });
+            services.AddSignalR();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -58,12 +69,13 @@ namespace Sk3tchIt
                 app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
+
+            app.UseCors("NoCors");
+
+            // app.UseHttpsRedirection();
             app.UseStaticFiles();
 
             app.UseRouting();
-
-            app.UseCors("NoCors");
 
             app.UseAuthentication();
             app.UseAuthorization();
@@ -73,6 +85,9 @@ namespace Sk3tchIt
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+                endpoints.MapHub<GameHub>("/gamehub");
+
                 endpoints.MapRazorPages();
             });
         }
