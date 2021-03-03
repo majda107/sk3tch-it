@@ -61,6 +61,13 @@ export const LobbyComponent = (): JSX.Element => {
 
     }, [])
 
+    useEffect(() => {
+
+        // console.log("CANVAS EFFECT!");
+        context = canvas.current?.getContext("2d") as CanvasRenderingContext2D;
+
+    }, [canvas]);
+
 
 
     return (
