@@ -3,15 +3,20 @@ import { CONSTS } from "../models/consts";
 
 
 console.log("Creating hub connection!");
-const connection = new signalR.HubConnectionBuilder().withUrl(`${CONSTS.endpoint}/gamehub`).build();
+export const connection = new signalR.HubConnectionBuilder().withUrl(`${CONSTS.endpoint}/gamehub`).build();
 connection.start();
 
 
-export const setProfle = () => {
-    connection.invoke("setProfile", "majda107");
+export const setProfle = (username: string) => {
+    connection.invoke("setProfile", username)
 };
 
 export const getProfiles = async () => {
     const users = await connection.invoke("getUsers");
     console.log(users);
 }
+
+
+// connection.on("users", (users) => {
+    // console.log(users);
+// });
