@@ -22,6 +22,10 @@ export const LobbyComponent = (): JSX.Element => {
     let last2X = -1;
     let last2Y = -1;
 
+    async function mouseUp() {
+        await connection.invoke("echoDraw", -1, -1);
+    }
+
     async function mouseMove(e: React.MouseEvent) {
         const x = e.clientX - (canvas?.current?.offsetLeft ?? 0);
         const y = e.clientY - (canvas?.current?.offsetTop ?? 0);
@@ -59,7 +63,7 @@ export const LobbyComponent = (): JSX.Element => {
 
         connection.on("echoDraw", (x: number, y: number) => {
             // console.log(x, y);
-            if (last2X >= 0 && last2Y >= 0) {
+            if (last2X >= 0 && last2Y >= 0 && x >= 0 && y >= 0) {
                 context.moveTo(last2X, last2Y);
                 context.lineTo(x, y);
                 context.stroke();
@@ -120,7 +124,7 @@ export const LobbyComponent = (): JSX.Element => {
                 <div className="col-9">
                     <div className="drawarea">
                         {/* kreslici plocha */}
-                        <canvas ref={canvas} onMouseMove={mouseMove}></canvas>
+                        <canvas ref={canvas} onMouseMove={mouseMove} onMouseUp={mouseUp}></canvas>
                     </div>
                     <div className="chat">
                         chat
