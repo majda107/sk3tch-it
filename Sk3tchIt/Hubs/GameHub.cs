@@ -25,6 +25,11 @@ namespace Sk3tchIt.Hubs
             await this.Clients.All.SendAsync("users", Profiles);
         }
 
+        public async Task EchoDraw(int x, int y)
+        {
+            await this.Clients.AllExcept(this.Context.ConnectionId).SendAsync("echoDraw", x, y);
+        }
+
         public async Task Start()
         {
             var key = "";

@@ -8,7 +8,9 @@ export const LobbyComponent = (): JSX.Element => {
     const [username, setUsername, bindUsername] = useInput("");
     const [profiles, setProfiles] = useState([] as any[]);
     const canvas = createRef<HTMLCanvasElement>();
+
     let context: CanvasRenderingContext2D;
+    const [draw, setDraw] = useState(false);
 
     async function start() {
         await connection.invoke("start");
@@ -17,18 +19,24 @@ export const LobbyComponent = (): JSX.Element => {
     let lastX = 0;
     let lastY = 0;
 
+    let last2X = -1;
+    let last2Y = -1;
+
     async function mouseMove(e: React.MouseEvent) {
         const x = e.clientX - (canvas?.current?.offsetLeft ?? 0);
         const y = e.clientY - (canvas?.current?.offsetTop ?? 0);
 
-        if (e.buttons == 1) {
+        if (draw && e.buttons == 1) {
             context.moveTo(lastX, lastY);
             context.lineTo(x, y);
             context.stroke();
+
+            connection.invoke("echoDraw", lastX, lastY);
         }
 
         lastX = x;
         lastY = y;
+
     }
 
     useEffect(() => {
@@ -46,7 +54,19 @@ export const LobbyComponent = (): JSX.Element => {
         })
 
         connection.on("draw", () => {
-            console.log("YOU SHOULD DRAW NOW");
+            setDraw(true);
+        })
+
+        connection.on("echoDraw", (x: number, y: number) => {
+            // console.log(x, y);
+            if (last2X >= 0 && last2Y >= 0) {
+                context.moveTo(last2X, last2Y);
+                context.lineTo(x, y);
+                context.stroke();
+            }
+
+            last2X = x;
+            last2Y = y;
         })
 
         if (canvas.current == null) return;
