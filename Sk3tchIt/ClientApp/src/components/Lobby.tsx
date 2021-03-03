@@ -55,6 +55,9 @@ export const LobbyComponent = (): JSX.Element => {
         console.log(context);
         // context = canvas.current?.getContext("2d");
 
+        console.log(canvas.current.width);
+        canvas.current.width = canvas.current.clientWidth;
+        canvas.current.height = canvas.current.clientHeight;
 
     }, [])
 
