@@ -37,11 +37,11 @@ namespace Sk3tchIt
                         .AllowAnyMethod()
                         .AllowAnyHeader()
                         // .AllowAnyOrigin()
-                        .WithOrigins("http://localhost:3000")
+                        .WithOrigins("https://localhost:5001")
                         .AllowCredentials();
                 });
             });
-            
+
             services.AddSpaStaticFiles(configuration => { configuration.RootPath = "ClientApp/dist"; });
 
 

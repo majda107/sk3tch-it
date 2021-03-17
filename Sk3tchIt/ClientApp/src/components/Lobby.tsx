@@ -10,7 +10,9 @@ export const LobbyComponent = (): JSX.Element => {
     const canvas = createRef<HTMLCanvasElement>();
 
     let context: CanvasRenderingContext2D;
-    const [draw, setDraw] = useState(false);
+
+    const [draw, setDraw] = useState(null as boolean | null);
+    const [theme, setTheme] = useState("");
 
     async function start() {
         await connection.invoke("start");
@@ -57,9 +59,14 @@ export const LobbyComponent = (): JSX.Element => {
             setProfiles(ps);
         })
 
-        connection.on("draw", () => {
+        connection.on("draw", (theme: string) => {
             setDraw(true);
+            setTheme(theme);
         })
+
+        connection.on("guess", () => {
+            setDraw(false);
+        });
 
         connection.on("echoDraw", (x: number, y: number) => {
             // console.log(x, y);
@@ -105,7 +112,18 @@ export const LobbyComponent = (): JSX.Element => {
 
                     <hr />
 
-                    <button onClick={start}>Start</button>
+                    {
+                        draw == null &&
+                        <button onClick={start}>Start</button>
+                    }
+                    {
+                        draw == false &&
+                        <span>Guess the word!</span>
+                    }
+                    {
+                        draw == true &&
+                        <span>You are drawing! ({theme})</span>
+                    }
 
 
                     <hr />

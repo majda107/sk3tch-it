@@ -41,7 +41,8 @@ namespace Sk3tchIt.Hubs
                 var profile = Profiles[key];
             }
 
-            await this.Clients.Client(key).SendAsync("draw");
+            await this.Clients.Client(key).SendAsync("draw", "banana");
+            await this.Clients.AllExcept(key).SendAsync("guess");
         }
 
         public Dictionary<string, string> GetUsers()
