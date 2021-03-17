@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.EntityFrameworkCore;
 using Sk3tchIt.Data;
 using Microsoft.Extensions.Configuration;
@@ -40,6 +41,8 @@ namespace Sk3tchIt
                         .AllowCredentials();
                 });
             });
+            
+            services.AddSpaStaticFiles(configuration => { configuration.RootPath = "ClientApp/dist"; });
 
 
             services.AddDbContext<ApplicationDbContext>(options =>
@@ -89,6 +92,17 @@ namespace Sk3tchIt
                 endpoints.MapHub<GameHub>("/gamehub");
 
                 endpoints.MapRazorPages();
+            });
+
+
+            app.UseSpa(spa =>
+            {
+                spa.Options.SourcePath = "ClientApp";
+
+                if (env.IsDevelopment())
+                {
+                    spa.UseReactDevelopmentServer("start");
+                }
             });
         }
     }
