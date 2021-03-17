@@ -45,6 +45,19 @@ namespace Sk3tchIt.Hubs
             await this.Clients.AllExcept(key).SendAsync("guess");
         }
 
+        public async Task Guess(string word)
+        {
+            var profile = Profiles[this.Context.ConnectionId];
+            if (word == "banana")
+            {
+                await this.Clients.Caller.SendAsync("chat", "[*] Correct!");
+                await this.Clients.Others.SendAsync("chat", $"[*]: {profile} IS CORRECT");
+                return;
+            }
+
+            await this.Clients.All.SendAsync("chat", $"[{profile}]: {word}");
+        }
+
         public Dictionary<string, string> GetUsers()
         {
             return Profiles;

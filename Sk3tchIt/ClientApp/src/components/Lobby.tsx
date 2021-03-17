@@ -1,6 +1,7 @@
 import { createRef, useEffect, useRef, useState } from 'react';
 import { useInput } from '../hooks/input.hook';
 import { connection, getProfiles, setProfle } from '../services/connection.service';
+import { ChatComponent } from './Chat';
 import './Lobby.css';
 
 export const LobbyComponent = (): JSX.Element => {
@@ -145,7 +146,8 @@ export const LobbyComponent = (): JSX.Element => {
                         <canvas ref={canvas} onMouseMove={mouseMove} onMouseUp={mouseUp}></canvas>
                     </div>
                     <div className="chat">
-                        chat
+                        {/* chat */}
+                        <ChatComponent />
                     </div>
                 </div>
             </div>
