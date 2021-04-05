@@ -15,27 +15,31 @@ import {
 import "./services/connection.service";
 import { Rooms } from './components/Rooms';
 import { Room } from './components/Room';
+import { CreateUsersContext, UsersContext } from './context/users.context';
 
 function App() {
 
-  const ctx = CreateSignalrContext();
+  const usersCtx = CreateUsersContext();
+  const ctx = CreateSignalrContext(usersCtx);
 
   return (
     <div className="App">
       <Router>
-        <SignalrContext.Provider value={ctx} >
-          {/* <LobbyComponent /> */}
+        <UsersContext.Provider value={usersCtx}>
+          <SignalrContext.Provider value={ctx} >
+            {/* <LobbyComponent /> */}
 
-          <Switch>
-            <Route exact path="/room/:name">
-              <Room />
-            </Route>
-            <Route path="/">
-              <Rooms />
-            </Route>
-          </Switch>
+            <Switch>
+              <Route exact path="/room/:name">
+                <Room />
+              </Route>
+              <Route path="/">
+                <Rooms />
+              </Route>
+            </Switch>
 
-        </SignalrContext.Provider>
+          </SignalrContext.Provider>
+        </UsersContext.Provider>
       </Router>
     </div >
   );

@@ -2,6 +2,7 @@ import { useContext, useState } from "react";
 import { useParams } from "react-router";
 import { SignalrContext } from "../context/signalr.context";
 import { useInput } from "../hooks/input.hook";
+import { RoomUsers } from "./RoomUsers";
 
 interface RouteParams {
     name: string
@@ -33,5 +34,7 @@ export function Room(): JSX.Element {
 
     return <div>
         <span>Welcome in room {params.name}</span>
+
+        <RoomUsers />
     </div>;
 }
