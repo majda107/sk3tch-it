@@ -10,7 +10,8 @@ namespace Sk3tchIt.Models
     {
         public Dictionary<string, GameUser> Users { get; set; } = new Dictionary<string, GameUser>();
 
-        public bool Running { get; set; }
+        // public bool Running { get; set; }
+        public RoomState State { get; set; }
         public string Drawing { get; set; }
 
 
@@ -22,6 +23,8 @@ namespace Sk3tchIt.Models
 
         public GameRoom()
         {
+            this.State = new RoomState();
+
             this.timer.AutoReset = true;
             this.timer.Elapsed += (o, e) =>
             {
@@ -75,9 +78,13 @@ namespace Sk3tchIt.Models
         {
             drawing = null;
 
-            if (!this.Running && this.Users.Count >= 2 && this.Users.Values.All(u => u.Ready))
+            if (!this.State.Running && this.Users.Count >= 2 && this.Users.Values.All(u => u.Ready))
             {
-                this.Running = true;
+                // RESET USER GUESSES
+                foreach (var user in this.Users.Values)
+                    user.HasGuessed = false;
+
+                this.State.Running = true;
                 this.Drawing = this.Users.Keys.First();
 
                 this.left = 30; // SET LEFT TIME
@@ -94,14 +101,31 @@ namespace Sk3tchIt.Models
         // TRY TO STOP THE ROOM
         public bool TryStopRoom()
         {
-            if (this.Running)
+            if (this.State.Running)
             {
                 Drawing = null;
-                this.Running = false;
+                this.State.Running = false;
 
                 this.timer.Stop();
                 this.Stopped?.Invoke(this, EventArgs.Empty);
 
+                return true;
+            }
+
+            return false;
+        }
+
+
+        // QUESS WORD
+        public bool QuessWord(string uid, string word)
+        {
+            // DRAWER CANNOT GUESS THE WORD
+            if (this.Drawing == uid) return false;
+
+            if (word.ToLower() == this.State.Word.ToLower() && this.Users.ContainsKey(uid) &&
+                !this.Users[uid].HasGuessed)
+            {
+                this.Users[uid].HasGuessed = true;
                 return true;
             }
 

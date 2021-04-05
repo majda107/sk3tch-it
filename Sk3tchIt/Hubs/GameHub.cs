@@ -37,7 +37,7 @@ namespace Sk3tchIt.Hubs
             // NOTIFY ALL USERS IN A ROOM
             await this.Clients.Clients(room.Users.Keys).SendUsers(GameUserDto.FromDict(room.Users));
 
-            return room.Running;
+            return room.State.Running;
         }
 
         public async Task Leave()

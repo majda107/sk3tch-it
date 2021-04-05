@@ -87,10 +87,20 @@ namespace Sk3tchIt.Services
         public async Task SendMessage(string uid, string message)
         {
             var room = this.Rooms.Values.FirstOrDefault(r => r.Users.Keys.Contains(uid));
+            if (room == null) return;
+
+            if (room.QuessWord(uid, message))
+            {
+                // IF EVERYONE HAS GUESSED
+                if (room.Users.Where(u => u.Key != room.Drawing).All(u => u.Value.HasGuessed))
+                    room.TryStopRoom();
+
+                await this._hub.Clients.Clients(room.Users.Keys)
+                    .SendMessage("server", "{SOMEONE} has guessed the word");
+            }
 
             // SEND TO ALL USERS
-            if (room != null)
-                await this._hub.Clients.Clients(room.Users.Keys).SendMessage(uid, message);
+            await this._hub.Clients.Clients(room.Users.Keys).SendMessage(uid, message);
         }
 
 
