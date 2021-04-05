@@ -9,7 +9,10 @@ namespace Sk3tchIt.Hubs.Interfaces
     {
         Task SendUsers(IList<GameUserDto> users);
         Task SendMessage(string uid, string message);
+
         Task Start(string drawing);
+        Task Stop();
+
         Task Draw(PencilStroke pencilStroke);
         Task Tick(int left);
     }

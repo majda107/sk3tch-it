@@ -12,8 +12,8 @@ namespace Sk3tchIt.Hubs
 {
     public class GameHub : Hub<IGameHub>
     {
-        public static Dictionary<string, string> Profiles { get; set; } = new Dictionary<string, string>();
-        public static Random r = new Random();
+        // public static Dictionary<string, string> Profiles { get; set; } = new Dictionary<string, string>();
+        // public static Random r = new Random();
 
 
         private readonly GameService _gs;

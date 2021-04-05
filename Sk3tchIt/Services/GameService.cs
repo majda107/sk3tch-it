@@ -14,8 +14,6 @@ namespace Sk3tchIt.Services
 {
     public class GameService
     {
-        // private System.Timers.Timer _timer;
-
         private readonly IHubContext<GameHub, IGameHub> _hub;
         // private readonly ILogger _logger;
 
@@ -26,27 +24,11 @@ namespace Sk3tchIt.Services
         // public GameService(IHubContext<GameHub, IGameHub> hub, ILogger logger)
         public GameService(IHubContext<GameHub, IGameHub> hub)
         {
-            // this._timer = new Timer(1000);
-            // this._timer.Elapsed += (o, e) => Tick();
-            // this._timer.AutoReset = true;
-            //
             // this._logger = logger;
 
             this._hub = hub;
         }
 
-
-        // private void Tick()
-        // {
-        //     Console.WriteLine("GAME TICK!");
-        //     // this._hub.Clients.All.SendAsync("tick");
-        // }
-
-        // public void StartGame()
-        // {
-        //     // this._timerThread.Start();
-        //     this._timer.Start();
-        // }
 
         private void CreateRoom(string name)
         {
@@ -54,7 +36,10 @@ namespace Sk3tchIt.Services
             this.Rooms.Add(name, room);
 
             // HOOK THE ROOM FOR TICK EVENT
-            room.Tick += async (o, left) => { await this._hub.Clients.Clients(room.Users.Keys).Tick(left); };
+            room.Tick += async (o, left) => await this._hub.Clients.Clients(room.Users.Keys).Tick(left);
+
+            // HOOK FOR ROOM STOP
+            room.Stopped += async (o, e) => await this._hub.Clients.Clients(room.Users.Keys).Stop();
         }
 
         // JOINS USER A ROOM + CREATES ONE

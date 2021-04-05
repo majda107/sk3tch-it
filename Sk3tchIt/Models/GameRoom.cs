@@ -18,6 +18,7 @@ namespace Sk3tchIt.Models
         private int left = 30;
 
         public event EventHandler<int> Tick;
+        public event EventHandler Stopped;
 
         public GameRoom()
         {
@@ -28,7 +29,7 @@ namespace Sk3tchIt.Models
                 Tick?.Invoke(this, left);
 
                 if (left <= 0)
-                    this.timer.Stop();
+                    this.TryStopRoom();
             };
         }
 
@@ -79,8 +80,28 @@ namespace Sk3tchIt.Models
                 this.Running = true;
                 this.Drawing = this.Users.Keys.First();
 
+                this.left = 30; // SET LEFT TIME
                 this.timer.Start();
+
                 drawing = this.Drawing;
+                return true;
+            }
+
+            return false;
+        }
+
+
+        // TRY TO STOP THE ROOM
+        public bool TryStopRoom()
+        {
+            if (this.Running)
+            {
+                Drawing = null;
+                this.Running = false;
+
+                this.timer.Stop();
+                this.Stopped?.Invoke(this, EventArgs.Empty);
+
                 return true;
             }
 
