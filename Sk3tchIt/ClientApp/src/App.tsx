@@ -20,6 +20,7 @@ import { ChatContext, CreateChatContext } from './context/chat.context';
 import { UserModel } from './models/user.model';
 import { Connection } from './components/Connection';
 import { connection } from './services/connection.service';
+import { CreateDrawingContext, DrawingContext } from './context/drawing.context';
 
 
 
@@ -30,6 +31,7 @@ function App() {
 
   const usersCtx = CreateUsersContext();
   const chatCtx = CreateChatContext();
+  const drawingCtx = CreateDrawingContext();
   const ctx = CreateSignalrContext(connection, usersCtx, chatCtx);
 
 
@@ -57,20 +59,22 @@ function App() {
       <Router>
         <UsersContext.Provider value={usersCtx}>
           <ChatContext.Provider value={chatCtx}>
-            <SignalrContext.Provider value={ctx} >
+            <DrawingContext.Provider value={drawingCtx}>
+              <SignalrContext.Provider value={ctx} >
 
-              <Connection />
+                <Connection />
 
-              <Switch>
-                <Route exact path="/room/:name">
-                  <Room />
-                </Route>
-                <Route path="/">
-                  <Rooms />
-                </Route>
-              </Switch>
+                <Switch>
+                  <Route exact path="/room/:name">
+                    <Room />
+                  </Route>
+                  <Route path="/">
+                    <Rooms />
+                  </Route>
+                </Switch>
 
-            </SignalrContext.Provider>
+              </SignalrContext.Provider>
+            </DrawingContext.Provider>
           </ChatContext.Provider>
         </UsersContext.Provider>
       </Router>

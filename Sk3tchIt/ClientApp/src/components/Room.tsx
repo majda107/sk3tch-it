@@ -3,6 +3,7 @@ import { useParams } from "react-router";
 import { SignalrContext } from "../context/signalr.context";
 import { useInput } from "../hooks/input.hook";
 import { RoomChat } from "./RoomChat";
+import { RoomDrawing } from "./RoomDrawing";
 import { RoomUsers } from "./RoomUsers";
 
 interface RouteParams {
@@ -37,6 +38,10 @@ export function Room(): JSX.Element {
         <span>Welcome in room {params.name}</span>
 
         <RoomUsers />
+
+        <hr />
+
+        <RoomDrawing />
 
         <hr />
 

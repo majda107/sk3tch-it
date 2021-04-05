@@ -53,7 +53,7 @@ namespace Sk3tchIt.Models
         {
             drawing = null;
 
-            if (!this.Running && this.Users.Count > 2 && this.Users.Values.All(u => u.Ready))
+            if (!this.Running && this.Users.Count >= 2 && this.Users.Values.All(u => u.Ready))
             {
                 this.Running = true;
                 this.Drawing = this.Users.Keys.First();
