@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
 using Sk3tchIt.Dtos;
 using Sk3tchIt.Hubs.Interfaces;
+using Sk3tchIt.Models;
 using Sk3tchIt.Services;
 
 namespace Sk3tchIt.Hubs
@@ -28,13 +29,15 @@ namespace Sk3tchIt.Hubs
             return this.Context.ConnectionId;
         }
 
-        public async Task Join(string roomName, string username)
+        public async Task<bool> Join(string roomName, string username)
         {
             var uid = this.Context.ConnectionId;
-            var room = this._gs.JoinRoom(roomName, uid, username);
+            var room = this._gs.JoinCreateRoom(roomName, uid, username);
 
             // NOTIFY ALL USERS IN A ROOM
             await this.Clients.Clients(room.Users.Keys).SendUsers(GameUserDto.FromDict(room.Users));
+
+            return room.Running;
         }
 
         public async Task Leave()
@@ -57,6 +60,14 @@ namespace Sk3tchIt.Hubs
         {
             var uid = this.Context.ConnectionId;
             await this._gs.SendMessage(uid, message);
+        }
+
+
+        // DRAW
+        public async Task Draw(PencilStroke pencilStroke)
+        {
+            var uid = this.Context.ConnectionId;
+            await this._gs.Draw(uid, pencilStroke);
         }
 
 

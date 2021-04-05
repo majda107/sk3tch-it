@@ -49,7 +49,7 @@ namespace Sk3tchIt.Services
 
 
         // JOINS USER A ROOM + CREATES ONE
-        public GameRoom JoinRoom(string roomName, string uid, string username)
+        public GameRoom JoinCreateRoom(string roomName, string uid, string username)
         {
             if (!this.Rooms.ContainsKey(roomName))
                 this.Rooms.Add(roomName, new GameRoom());
@@ -97,6 +97,17 @@ namespace Sk3tchIt.Services
             // SEND TO ALL USERS
             if (room != null)
                 await this._hub.Clients.Clients(room.Users.Keys).SendMessage(uid, message);
+        }
+
+
+        // DRAW
+        public async Task Draw(string uid, PencilStroke pencilStroke)
+        {
+            var room = this.Rooms.Values.FirstOrDefault(r => r.Drawing == uid);
+            if (room == null) return;
+
+            // SEND TO OTHER USERS (without the one who is drawing)
+            await this._hub.Clients.Clients(room.Users.Keys.Except(new string[] {uid})).Draw(pencilStroke);
         }
     }
 }

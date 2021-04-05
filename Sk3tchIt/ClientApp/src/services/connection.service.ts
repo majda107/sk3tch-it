@@ -1,7 +1,9 @@
 import * as signalR from "@aspnet/signalr";
 import { ChatContext } from "../context/chat.context";
 import { DrawingContext } from "../context/drawing.context";
+import { GameContext } from "../context/game.context";
 import { UsersContext } from "../context/users.context";
+import { PencilStrokeModel } from "../models/pencil-stroke.model";
 import { UserModel } from "../models/user.model";
 // import { CONSTS } from "../models/consts";
 
@@ -25,7 +27,10 @@ import { UserModel } from "../models/user.model";
 export const ctxState = {
     chatCtx: {} as ChatContext,
     usersCtx: {} as UsersContext,
-    drawingCtx: {} as DrawingContext
+    drawingCtx: {} as DrawingContext,
+    gameCtx: {} as GameContext,
+
+    canvas: {} as CanvasRenderingContext2D
 };
 
 export const connection = new signalR.HubConnectionBuilder().withUrl(`/gamehub`).build();
@@ -42,5 +47,23 @@ connection.on("sendMessage", (uid: string, message: string) => {
 
 connection.on("start", (drawing) => {
     console.log(drawing);
+
+    ctxState.gameCtx.setRunning(true);
     ctxState.drawingCtx.setDrawing(drawing);
 })
+
+
+
+let lastX = 0;
+let lastY = 0;
+
+connection.on("draw", (stroke: PencilStrokeModel) => {
+    if (stroke.down && lastX >= 0 && lastY >= 0 && stroke.x >= 0 && stroke.y >= 0) {
+        ctxState.canvas.moveTo(lastX, lastY);
+        ctxState.canvas.lineTo(stroke.x, stroke.y);
+        ctxState.canvas.stroke();
+    }
+
+    lastX = stroke.x;
+    lastY = stroke.y;
+});

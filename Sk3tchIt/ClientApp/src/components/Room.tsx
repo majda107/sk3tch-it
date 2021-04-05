@@ -1,5 +1,6 @@
 import { useContext, useState } from "react";
 import { useParams } from "react-router";
+import { GameContext } from "../context/game.context";
 import { SignalrContext } from "../context/signalr.context";
 import { useInput } from "../hooks/input.hook";
 import { RoomChat } from "./RoomChat";
@@ -12,13 +13,17 @@ interface RouteParams {
 
 export function Room(): JSX.Element {
     const params = useParams<RouteParams>();
+
     const ctx = useContext(SignalrContext);
+    const gameCtx = useContext(GameContext);
 
     const [username, setUsername, bindUsername] = useInput("");
     const [joined, setJoined] = useState(false);
 
     async function joinUsername() {
-        await ctx.connection.invoke("join", params.name, username);
+        const running = await ctx.connection.invoke("join", params.name, username);
+        gameCtx.setRunning(running);
+
         setJoined(true);
     }
 

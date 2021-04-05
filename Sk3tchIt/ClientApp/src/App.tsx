@@ -21,6 +21,7 @@ import { UserModel } from './models/user.model';
 import { Connection } from './components/Connection';
 import { connection } from './services/connection.service';
 import { CreateDrawingContext, DrawingContext } from './context/drawing.context';
+import { CreateGameContext, GameContext } from "./context/game.context";
 
 
 
@@ -32,6 +33,7 @@ function App() {
   const usersCtx = CreateUsersContext();
   const chatCtx = CreateChatContext();
   const drawingCtx = CreateDrawingContext();
+  const gameCtx = CreateGameContext();
   const ctx = CreateSignalrContext(connection, usersCtx, chatCtx);
 
 
@@ -60,20 +62,22 @@ function App() {
         <UsersContext.Provider value={usersCtx}>
           <ChatContext.Provider value={chatCtx}>
             <DrawingContext.Provider value={drawingCtx}>
-              <SignalrContext.Provider value={ctx} >
+              <GameContext.Provider value={gameCtx}>
+                <SignalrContext.Provider value={ctx} >
 
-                <Connection />
+                  <Connection />
 
-                <Switch>
-                  <Route exact path="/room/:name">
-                    <Room />
-                  </Route>
-                  <Route path="/">
-                    <Rooms />
-                  </Route>
-                </Switch>
+                  <Switch>
+                    <Route exact path="/room/:name">
+                      <Room />
+                    </Route>
+                    <Route path="/">
+                      <Rooms />
+                    </Route>
+                  </Switch>
 
-              </SignalrContext.Provider>
+                </SignalrContext.Provider>
+              </GameContext.Provider>
             </DrawingContext.Provider>
           </ChatContext.Provider>
         </UsersContext.Provider>
