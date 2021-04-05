@@ -1,38 +1,43 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Timers;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.Extensions.Logging;
 using Sk3tchIt.Hubs;
+using Sk3tchIt.Hubs.Interfaces;
 using Sk3tchIt.Models;
 
 namespace Sk3tchIt.Services
 {
     public class GameService
     {
-        // private Thread _timerThread;
         private System.Timers.Timer _timer;
-        private readonly IHubContext<GameHub> _hub;
+
+        private readonly IHubContext<GameHub, IGameHub> _hub;
+        // private readonly ILogger _logger;
 
 
         public Dictionary<string, GameRoom> Rooms { get; set; } = new Dictionary<string, GameRoom>();
 
 
-        public GameService(IHubContext<GameHub> hub)
+        // public GameService(IHubContext<GameHub, IGameHub> hub, ILogger logger)
+        public GameService(IHubContext<GameHub, IGameHub> hub)
         {
-            // this._timerThread = new Thread(Tick);
             this._timer = new Timer(1000);
             this._timer.Elapsed += (o, e) => Tick();
             this._timer.AutoReset = true;
 
             this._hub = hub;
+            // this._logger = logger;
         }
 
 
         private void Tick()
         {
             Console.WriteLine("GAME TICK!");
-            this._hub.Clients.All.SendAsync("tick");
+            // this._hub.Clients.All.SendAsync("tick");
         }
 
         public void StartGame()
@@ -74,6 +79,17 @@ namespace Sk3tchIt.Services
 
             room.SetUserReady(uid, state);
             return room;
+        }
+
+
+        // SENDS MESSAGE INTO A ROOM
+        public async Task SendMessage(string uid, string message)
+        {
+            var room = this.Rooms.Values.FirstOrDefault(r => r.Users.Keys.Contains(uid));
+
+            // SEND TO ALL USERS
+            if (room != null)
+                await this._hub.Clients.Clients(room.Users.Keys).SendMessage(uid, message);
         }
     }
 }

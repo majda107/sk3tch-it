@@ -22,6 +22,7 @@ namespace Sk3tchIt.Hubs
             this._gs = gs;
         }
 
+        // ID ECHO
         public async Task<string> Id()
         {
             return this.Context.ConnectionId;
@@ -42,6 +43,8 @@ namespace Sk3tchIt.Hubs
             throw new NotImplementedException();
         }
 
+
+        // SETS READY / PENDING STATE
         public async Task Ready(bool state)
         {
             var uid = this.Context.ConnectionId;
@@ -49,6 +52,14 @@ namespace Sk3tchIt.Hubs
 
             // NOTIFY ALL USERS IN A ROOM
             await this.Clients.Clients(room.Users.Keys).SendUsers(GameUserDto.FromDict(room.Users));
+        }
+
+
+        // SEND MESSAGE
+        public async Task Message(string message)
+        {
+            var uid = this.Context.ConnectionId;
+            await this._gs.SendMessage(uid, message);
         }
 
 

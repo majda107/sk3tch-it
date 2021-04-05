@@ -7,5 +7,6 @@ namespace Sk3tchIt.Hubs.Interfaces
     public interface IGameHub
     {
         Task SendUsers(IList<GameUserDto> users);
+        Task SendMessage(string uid, string message);
     }
 }

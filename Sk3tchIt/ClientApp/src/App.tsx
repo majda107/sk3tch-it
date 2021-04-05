@@ -17,6 +17,7 @@ import "./services/connection.service";
 import { Rooms } from './components/Rooms';
 import { Room } from './components/Room';
 import { CreateUsersContext, UsersContext } from './context/users.context';
+import { ChatContext, CreateChatContext } from './context/chat.context';
 
 
 
@@ -29,7 +30,8 @@ function App() {
   const [connected, setConnected] = useState(false);
 
   const usersCtx = CreateUsersContext();
-  const ctx = CreateSignalrContext(connection, usersCtx);
+  const chatCtx = CreateChatContext();
+  const ctx = CreateSignalrContext(connection, usersCtx, chatCtx);
 
 
   async function connect() {
@@ -55,19 +57,21 @@ function App() {
     <div className="App">
       <Router>
         <UsersContext.Provider value={usersCtx}>
-          <SignalrContext.Provider value={ctx} >
-            {/* <LobbyComponent /> */}
+          <ChatContext.Provider value={chatCtx}>
+            <SignalrContext.Provider value={ctx} >
+              {/* <LobbyComponent /> */}
 
-            <Switch>
-              <Route exact path="/room/:name">
-                <Room />
-              </Route>
-              <Route path="/">
-                <Rooms />
-              </Route>
-            </Switch>
+              <Switch>
+                <Route exact path="/room/:name">
+                  <Room />
+                </Route>
+                <Route path="/">
+                  <Rooms />
+                </Route>
+              </Switch>
 
-          </SignalrContext.Provider>
+            </SignalrContext.Provider>
+          </ChatContext.Provider>
         </UsersContext.Provider>
       </Router>
     </div >
