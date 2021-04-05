@@ -40,6 +40,9 @@ namespace Sk3tchIt.Services
 
             // HOOK FOR ROOM STOP
             room.Stopped += async (o, e) => await this._hub.Clients.Clients(room.Users.Keys).Stop();
+
+            // REFRESH ALL CLIENT ROOMS
+            this._hub.Clients.All.SendRooms(this.Rooms.Keys.ToList());
         }
 
         // JOINS USER A ROOM + CREATES ONE
@@ -98,9 +101,11 @@ namespace Sk3tchIt.Services
                 await this._hub.Clients.Clients(room.Users.Keys)
                     .SendMessage("server", "{SOMEONE} has guessed the word");
             }
-
-            // SEND TO ALL USERS
-            await this._hub.Clients.Clients(room.Users.Keys).SendMessage(uid, message);
+            else
+            {
+                // SEND TO ALL USERS
+                await this._hub.Clients.Clients(room.Users.Keys).SendMessage(uid, message);
+            }
         }
 
 

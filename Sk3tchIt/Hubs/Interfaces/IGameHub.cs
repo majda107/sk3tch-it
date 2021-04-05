@@ -8,6 +8,8 @@ namespace Sk3tchIt.Hubs.Interfaces
     public interface IGameHub
     {
         Task SendUsers(IList<GameUserDto> users);
+        Task SendRooms(IList<string> rooms);
+
         Task SendMessage(string uid, string message);
 
         Task Start(string drawing);

@@ -29,6 +29,7 @@ namespace Sk3tchIt.Hubs
             return this.Context.ConnectionId;
         }
 
+        // ROOMS ECHO
         public async Task<bool> Join(string roomName, string username)
         {
             var uid = this.Context.ConnectionId;
@@ -68,6 +69,14 @@ namespace Sk3tchIt.Hubs
         {
             var uid = this.Context.ConnectionId;
             await this._gs.Draw(uid, pencilStroke);
+        }
+
+
+        // CONNECTION BEHAVIOR
+        public override async Task OnConnectedAsync()
+        {
+            await this.Clients.All.SendRooms(this._gs.Rooms.Keys.ToList());
+            await base.OnConnectedAsync();
         }
 
 
