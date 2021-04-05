@@ -48,8 +48,8 @@ connection.on("sendMessage", (uid: string, message: string) => {
 connection.on("start", (drawing) => {
     console.log(drawing);
 
-    ctxState.gameCtx.setRunning(true);
     ctxState.drawingCtx.setDrawing(drawing);
+    ctxState.gameCtx.setRunning(true);
 })
 
 
@@ -74,3 +74,8 @@ connection.on("tick", (left: number) => {
     console.log("Tick-tock", left);
     ctxState.drawingCtx.setLeft(left);
 })
+
+connection.on("stop", () => {
+    ctxState.gameCtx.setRunning(false);
+    ctxState.drawingCtx.clear();
+});
