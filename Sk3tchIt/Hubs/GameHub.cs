@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
+using Sk3tchIt.Dtos;
 using Sk3tchIt.Hubs.Interfaces;
 using Sk3tchIt.Services;
 
@@ -28,7 +29,7 @@ namespace Sk3tchIt.Hubs
             var room = this._gs.JoinRoom(roomName, uid, username);
 
             // NOTIFY ALL USERS IN A ROOM
-            await this.Clients.Clients(room.Users.Keys).SendUsers(room.Users);
+            await this.Clients.Clients(room.Users.Keys).SendUsers(GameUserDto.FromDict(room.Users));
         }
 
         public override async Task OnDisconnectedAsync(Exception? exception)
@@ -37,7 +38,7 @@ namespace Sk3tchIt.Hubs
 
             var room = this._gs.DisconnectRoom(uid);
             if (room != null)
-                await this.Clients.Clients(room.Users.Keys).SendUsers(room.Users);
+                await this.Clients.Clients(room.Users.Keys).SendUsers(GameUserDto.FromDict(room.Users));
 
             await base.OnDisconnectedAsync(exception);
         }

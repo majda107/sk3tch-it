@@ -4,7 +4,7 @@ namespace Sk3tchIt.Models
 {
     public class GameRoom
     {
-        public Dictionary<string, string> Users { get; set; } = new Dictionary<string, string>();
+        public Dictionary<string, GameUser> Users { get; set; } = new Dictionary<string, GameUser>();
 
 
         // JOINS USER A ROOM
@@ -12,7 +12,7 @@ namespace Sk3tchIt.Models
         public bool JoinUser(string uid, string name)
         {
             if (!this.Users.ContainsKey(uid))
-                this.Users.Add(uid, name);
+                this.Users.Add(uid, new GameUser(name));
 
             return true;
         }
@@ -23,7 +23,7 @@ namespace Sk3tchIt.Models
         public void SetUser(string uid, string name)
         {
             if (this.Users.ContainsKey(uid))
-                this.Users[uid] = name;
+                this.Users[uid].Name = name;
         }
 
 
