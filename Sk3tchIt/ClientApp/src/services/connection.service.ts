@@ -53,6 +53,7 @@ connection.on("start", (drawing) => {
 })
 
 
+// DRAW CONNECTION, TODO MAKE CLEANER / SELF CONTAINED
 
 let lastX = 0;
 let lastY = 0;
@@ -67,3 +68,9 @@ connection.on("draw", (stroke: PencilStrokeModel) => {
     lastX = stroke.x;
     lastY = stroke.y;
 });
+
+
+connection.on("tick", (left: number) => {
+    console.log("Tick-tock", left);
+    ctxState.drawingCtx.setLeft(left);
+})

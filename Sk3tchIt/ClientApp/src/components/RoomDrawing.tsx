@@ -10,6 +10,7 @@ export function RoomDrawing(): JSX.Element {
     return <div>
 
         <b>{usersCtx.users.find(u => u.uid == ctx.drawing)?.name ?? '-'} is drawing</b>
+        <span>{ctx.left}s left</span>
         <Canvas />
 
     </div>;

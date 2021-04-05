@@ -30,8 +30,9 @@ namespace Sk3tchIt.Services
             // this._timer.Elapsed += (o, e) => Tick();
             // this._timer.AutoReset = true;
             //
-            // this._hub = hub;
             // this._logger = logger;
+
+            this._hub = hub;
         }
 
 
@@ -53,7 +54,7 @@ namespace Sk3tchIt.Services
             this.Rooms.Add(name, room);
 
             // HOOK THE ROOM FOR TICK EVENT
-            room.Tick += (o, left) => { this._hub.Clients.Clients(room.Users.Keys).Tick(left); };
+            room.Tick += async (o, left) => { await this._hub.Clients.Clients(room.Users.Keys).Tick(left); };
         }
 
         // JOINS USER A ROOM + CREATES ONE
