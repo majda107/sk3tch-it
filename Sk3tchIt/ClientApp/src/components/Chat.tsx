@@ -1,7 +1,11 @@
 import { send } from "node:process";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { Transition, TransitionGroup } from "react-transition-group";
 import { useInput } from "../hooks/input.hook";
 import { connection } from "../services/connection.service";
+import gsap from "gsap";
+import { ChatMessageComponent } from "./ChatMessage";
+
 
 export const ChatComponent = (): JSX.Element => {
 
@@ -26,6 +30,11 @@ export const ChatComponent = (): JSX.Element => {
         })
     }, []);
 
+    async function gsapFrom(e: any) {
+        gsap.from(e, { x: 100, duration: 400, ease: "power3.in" });
+        console.log(e);
+    }
+
 
     async function send() {
         if (input == "") return;
@@ -34,13 +43,21 @@ export const ChatComponent = (): JSX.Element => {
         (setInput as any)("");
     }
 
+    const nodeRef = useRef(null)
+
     return <div>
         <ul>
-            {
-                messages.map((m, i) => <li key={i}>
-                    {m}
-                </li>)
-            }
+            <TransitionGroup>
+                {
+                    messages.map((m, i) =>
+                        <Transition nodeRef={nodeRef} key={i} timeout={500} onEnter={(e: any) => { console.log(nodeRef.current) }}>
+                            <p>
+                                {m}
+                            </p>
+                        </Transition>
+                    )
+                }
+            </TransitionGroup>
         </ul>
 
         <input type="text" {...bindInput} />
