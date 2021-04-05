@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
-import { LobbyComponent } from './components/Lobby';
 import { CreateSignalrContext, SignalrContext } from './context/signalr.context';
 import * as signalR from "@aspnet/signalr";
 
@@ -18,10 +17,10 @@ import { Rooms } from './components/Rooms';
 import { Room } from './components/Room';
 import { CreateUsersContext, UsersContext } from './context/users.context';
 import { ChatContext, CreateChatContext } from './context/chat.context';
+import { UserModel } from './models/user.model';
+import { Connection } from './components/Connection';
+import { connection } from './services/connection.service';
 
-
-
-const connection = new signalR.HubConnectionBuilder().withUrl(`/gamehub`).build();
 
 
 
@@ -59,7 +58,8 @@ function App() {
         <UsersContext.Provider value={usersCtx}>
           <ChatContext.Provider value={chatCtx}>
             <SignalrContext.Provider value={ctx} >
-              {/* <LobbyComponent /> */}
+
+              <Connection />
 
               <Switch>
                 <Route exact path="/room/:name">

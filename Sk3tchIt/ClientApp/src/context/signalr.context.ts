@@ -11,21 +11,25 @@ export interface SignalrContext {
 }
 
 
+// // BIND CONNECTION
+// export function BindSignalrEvents(connection: signalR.HubConnection, usersCtx: UsersContext, chatCtx: ChatContext) {
+//     // RECEIVED USERS
+//     connection.on("sendUsers", (users: UserModel[]) => {
+//         usersCtx.setUsers(users);
+//     });
+
+//     connection.on("sendMessage", (uid: string, message: string) => {
+//         chatCtx.addMessage(uid, message);
+//     });
+// }
+
 
 // INJECT COMMUNICATION CONTEXTS
 export function CreateSignalrContext(connection: signalR.HubConnection, usersCtx: UsersContext, chatCtx: ChatContext): SignalrContext {
 
     const [id, setId] = useState("");
 
-    // RECEIVED USERS
-    connection.on("sendUsers", (users: UserModel[]) => {
-        usersCtx.setUsers(users);
-    });
-
-    connection.on("sendMessage", (uid: string, message: string) => {
-        chatCtx.addMessage(uid, message);
-    });
-
+    // BindSignalrEvents(connection, usersCtx, chatCtx);
 
     return {
         connection,

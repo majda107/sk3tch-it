@@ -1,28 +1,31 @@
-import { useContext } from "react"
+import { useContext, useEffect } from "react"
 import { ChatContext } from "../context/chat.context"
 import { SignalrContext } from "../context/signalr.context";
 import { useInput } from "../hooks/input.hook";
+import { connection } from "../services/connection.service";
+
+
 
 export function RoomChat(): JSX.Element {
     const ctx = useContext(ChatContext);
-    const signalrCtx = useContext(SignalrContext);
 
     const [message, setMessage, bindMessage] = useInput("");
 
     async function sendMessage() {
         if (!message) return;
 
-        await signalrCtx.connection.invoke("message", message);;
+        await connection.invoke("message", message);;
         (setMessage as any)("");
     }
 
+
+
     return <div>
         <ul>
-            {ctx.messages.map((m, i) => {
-                <li key={i}>
-                    {m.uid} - {m.message}
-                </li>
-            })}
+            {/* {ctx.messages.map(m => m.message).join()} */}
+            {ctx.messages.map((m, i) => <li key={Math.random()}>
+                {m.uid} - {m.message}
+            </li>)}
         </ul>
 
         <form>
