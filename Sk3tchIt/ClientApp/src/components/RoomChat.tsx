@@ -1,6 +1,7 @@
 import { useContext, useEffect } from "react"
 import { ChatContext } from "../context/chat.context"
 import { SignalrContext } from "../context/signalr.context";
+import { UsersContext } from "../context/users.context";
 import { useInput } from "../hooks/input.hook";
 import { connection } from "../services/connection.service";
 
@@ -8,6 +9,7 @@ import { connection } from "../services/connection.service";
 
 export function RoomChat(): JSX.Element {
     const ctx = useContext(ChatContext);
+    const usersCtx = useContext(UsersContext);
 
     const [message, setMessage, bindMessage] = useInput("");
 
@@ -24,7 +26,7 @@ export function RoomChat(): JSX.Element {
         <ul>
             {/* {ctx.messages.map(m => m.message).join()} */}
             {ctx.messages.map((m, i) => <li key={Math.random()}>
-                {m.uid} - {m.message}
+                [{usersCtx.users.find(u => u.uid == m.uid)?.name ?? '-'}] {m.message}
             </li>)}
         </ul>
 
