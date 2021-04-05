@@ -14,7 +14,7 @@ namespace Sk3tchIt.Services
 {
     public class GameService
     {
-        private System.Timers.Timer _timer;
+        // private System.Timers.Timer _timer;
 
         private readonly IHubContext<GameHub, IGameHub> _hub;
         // private readonly ILogger _logger;
@@ -26,33 +26,41 @@ namespace Sk3tchIt.Services
         // public GameService(IHubContext<GameHub, IGameHub> hub, ILogger logger)
         public GameService(IHubContext<GameHub, IGameHub> hub)
         {
-            this._timer = new Timer(1000);
-            this._timer.Elapsed += (o, e) => Tick();
-            this._timer.AutoReset = true;
-
-            this._hub = hub;
+            // this._timer = new Timer(1000);
+            // this._timer.Elapsed += (o, e) => Tick();
+            // this._timer.AutoReset = true;
+            //
+            // this._hub = hub;
             // this._logger = logger;
         }
 
 
-        private void Tick()
-        {
-            Console.WriteLine("GAME TICK!");
-            // this._hub.Clients.All.SendAsync("tick");
-        }
+        // private void Tick()
+        // {
+        //     Console.WriteLine("GAME TICK!");
+        //     // this._hub.Clients.All.SendAsync("tick");
+        // }
 
-        public void StartGame()
-        {
-            // this._timerThread.Start();
-            this._timer.Start();
-        }
+        // public void StartGame()
+        // {
+        //     // this._timerThread.Start();
+        //     this._timer.Start();
+        // }
 
+        private void CreateRoom(string name)
+        {
+            var room = new GameRoom();
+            this.Rooms.Add(name, room);
+
+            // HOOK THE ROOM FOR TICK EVENT
+            room.Tick += (o, left) => { this._hub.Clients.Clients(room.Users.Keys).Tick(left); };
+        }
 
         // JOINS USER A ROOM + CREATES ONE
         public GameRoom JoinCreateRoom(string roomName, string uid, string username)
         {
             if (!this.Rooms.ContainsKey(roomName))
-                this.Rooms.Add(roomName, new GameRoom());
+                this.CreateRoom(roomName);
 
             var room = this.Rooms[roomName];
 

@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Timers;
 using Microsoft.EntityFrameworkCore.Design;
 
 namespace Sk3tchIt.Models
@@ -10,6 +12,25 @@ namespace Sk3tchIt.Models
 
         public bool Running { get; set; }
         public string Drawing { get; set; }
+
+
+        private System.Timers.Timer timer = new Timer(1000);
+        private int left = 30;
+
+        public event EventHandler<int> Tick;
+
+        public GameRoom()
+        {
+            this.timer.AutoReset = true;
+            this.timer.Elapsed += (o, e) =>
+            {
+                left -= 1;
+                Tick?.Invoke(this, left);
+
+                if (left <= 0)
+                    this.timer.Stop();
+            };
+        }
 
 
         // JOINS USER A ROOM
@@ -58,6 +79,7 @@ namespace Sk3tchIt.Models
                 this.Running = true;
                 this.Drawing = this.Users.Keys.First();
 
+                this.timer.Start();
                 drawing = this.Drawing;
                 return true;
             }

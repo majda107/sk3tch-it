@@ -11,5 +11,6 @@ namespace Sk3tchIt.Hubs.Interfaces
         Task SendMessage(string uid, string message);
         Task Start(string drawing);
         Task Draw(PencilStroke pencilStroke);
+        void Tick(int left);
     }
 }
