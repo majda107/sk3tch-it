@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Timers;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
+using Sk3tchIt.Dtos;
 using Sk3tchIt.Hubs;
 using Sk3tchIt.Hubs.Interfaces;
 using Sk3tchIt.Models;
@@ -72,13 +73,19 @@ namespace Sk3tchIt.Services
         }
 
 
-        public GameRoom SetReady(string uid, bool state)
+        public async Task SetReady(string uid, bool state)
         {
             var room = this.Rooms.Values.FirstOrDefault(r => r.Users.Keys.Contains(uid));
-            if (room == null) return null;
+            if (room == null) return;
 
             room.SetUserReady(uid, state);
-            return room;
+
+            // UPDATE ALL USERS
+            await this._hub.Clients.Clients(room.Users.Keys).SendUsers(GameUserDto.FromDict(room.Users));
+
+            // START GAME IF ALL USERS ARE READY
+            if (room.TryStartRoom(out string drawing))
+                await this._hub.Clients.Clients(room.Users.Keys).Start(drawing);
         }
 
 

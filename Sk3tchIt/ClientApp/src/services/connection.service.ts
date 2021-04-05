@@ -37,3 +37,7 @@ connection.on("sendUsers", (users: UserModel[]) => {
 connection.on("sendMessage", (uid: string, message: string) => {
     ctxState.chatCtx.addMessage(uid, message);
 });
+
+connection.on("start", () => {
+    console.log("GAME HAS STARTED");
+})

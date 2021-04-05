@@ -48,10 +48,7 @@ namespace Sk3tchIt.Hubs
         public async Task Ready(bool state)
         {
             var uid = this.Context.ConnectionId;
-            var room = this._gs.SetReady(uid, state);
-
-            // NOTIFY ALL USERS IN A ROOM
-            await this.Clients.Clients(room.Users.Keys).SendUsers(GameUserDto.FromDict(room.Users));
+            await this._gs.SetReady(uid, state);
         }
 
 
