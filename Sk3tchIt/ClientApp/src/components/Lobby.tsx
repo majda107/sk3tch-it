@@ -81,6 +81,12 @@ export const LobbyComponent = (): JSX.Element => {
             last2Y = y;
         })
 
+
+        connection.on("tick", () => {
+            console.log("SERVER TICK!!!");
+        });
+
+
         if (canvas.current == null) return;
 
         context = canvas.current?.getContext("2d") as CanvasRenderingContext2D;

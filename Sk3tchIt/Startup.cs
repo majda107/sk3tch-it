@@ -14,6 +14,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Sk3tchIt.Hubs;
+using Sk3tchIt.Services;
 
 namespace Sk3tchIt
 {
@@ -55,6 +56,7 @@ namespace Sk3tchIt
             services.AddControllersWithViews();
 
             services.AddSignalR();
+            services.AddSingleton<GameService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

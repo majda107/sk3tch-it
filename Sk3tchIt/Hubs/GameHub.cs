@@ -3,13 +3,23 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
+using Sk3tchIt.Services;
 
 namespace Sk3tchIt.Hubs
 {
     public class GameHub : Hub
     {
+        
         public static Dictionary<string, string> Profiles { get; set; } = new Dictionary<string, string>();
         public static Random r = new Random();
+
+
+        private readonly GameService _gs;
+        
+        public GameHub(GameService gs)
+        {
+            this._gs = gs;
+        }
 
 
         public async Task SetProfile(string username)
@@ -43,6 +53,9 @@ namespace Sk3tchIt.Hubs
 
             await this.Clients.Client(key).SendAsync("draw", "banana");
             await this.Clients.AllExcept(key).SendAsync("guess");
+
+            Console.WriteLine("Game started!");
+            this._gs.StartGame();
         }
 
         public async Task Guess(string word)
