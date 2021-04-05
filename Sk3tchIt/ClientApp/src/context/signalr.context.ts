@@ -15,9 +15,9 @@ export function CreateSignalrContext(usersCtx: UsersContext): SignalrContext {
 
 
     // RECEIVED USERS
-    connection.on("sendUsers", (rawUsers: any) => {
-        var users = Object.keys(rawUsers).map(k => ({ uid: k, name: rawUsers[k] } as UserModel));
-        console.log(users);
+    connection.on("sendUsers", (users: UserModel[]) => {
+        // var users = Object.keys(rawUsers).map(k => ({ uid: k, name: rawUsers[k] } as UserModel));
+        // console.log(users);
 
         usersCtx.setUsers(users);
     });

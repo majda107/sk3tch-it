@@ -9,7 +9,7 @@ export function RoomUsers(): JSX.Element {
         <h2>Lobby users</h2>
         <ul>
             {ctx.users.map(u => <li key={u.uid}>
-                {u.name}
+                {u.name} [{u.ready ? 'ready' : 'pending'}]
             </li>)}
         </ul>
     </div>
