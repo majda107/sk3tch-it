@@ -1,30 +1,30 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import * as signalR from "@aspnet/signalr";
 import { UsersContext } from "./users.context";
 import { UserModel } from "../models/user.model";
 
 export interface SignalrContext {
-    connection: signalR.HubConnection
+    connection: signalR.HubConnection,
+    id: string,
+    setId: (id: string) => void
 }
 
 
-// INJECT COMMUNICATION CONTEXTS
-export function CreateSignalrContext(usersCtx: UsersContext): SignalrContext {
-    const connection = new signalR.HubConnectionBuilder().withUrl(`/gamehub`).build();
-    connection.start(); // DEBUG
 
+// INJECT COMMUNICATION CONTEXTS
+export function CreateSignalrContext(connection: signalR.HubConnection, usersCtx: UsersContext): SignalrContext {
+
+    const [id, setId] = useState("");
 
     // RECEIVED USERS
     connection.on("sendUsers", (users: UserModel[]) => {
-        // var users = Object.keys(rawUsers).map(k => ({ uid: k, name: rawUsers[k] } as UserModel));
-        // console.log(users);
-
         usersCtx.setUsers(users);
     });
 
 
     return {
-        connection
+        connection,
+        id, setId
     }
 }
 

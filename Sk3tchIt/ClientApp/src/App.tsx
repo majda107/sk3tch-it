@@ -1,8 +1,9 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import { LobbyComponent } from './components/Lobby';
 import { CreateSignalrContext, SignalrContext } from './context/signalr.context';
+import * as signalR from "@aspnet/signalr";
 
 import {
   BrowserRouter as Router,
@@ -17,10 +18,38 @@ import { Rooms } from './components/Rooms';
 import { Room } from './components/Room';
 import { CreateUsersContext, UsersContext } from './context/users.context';
 
+
+
+const connection = new signalR.HubConnectionBuilder().withUrl(`/gamehub`).build();
+
+
+
 function App() {
 
+  const [connected, setConnected] = useState(false);
+
   const usersCtx = CreateUsersContext();
-  const ctx = CreateSignalrContext(usersCtx);
+  const ctx = CreateSignalrContext(connection, usersCtx);
+
+
+  async function connect() {
+    await connection.start(); // START GLOBAL CONNECTION
+
+    // RETREIVE ID
+    const id = await connection.invoke("id");
+    ctx.setId(id);
+
+    setConnected(true);
+  }
+
+  // CONNECT AT INITIAL CREATE
+  useEffect(() => {
+    connect();
+  }, [])
+
+
+
+  if (!connected) return <span>Connecting...</span>;
 
   return (
     <div className="App">

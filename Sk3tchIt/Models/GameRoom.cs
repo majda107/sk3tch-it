@@ -33,5 +33,13 @@ namespace Sk3tchIt.Models
             if (this.Users.ContainsKey(uid))
                 this.Users.Remove(uid);
         }
+
+
+        // SETS USER READY / PENDING
+        public void SetUserReady(string uid, bool state)
+        {
+            if (this.Users.ContainsKey(uid))
+                this.Users[uid].Ready = state;
+        }
     }
 }

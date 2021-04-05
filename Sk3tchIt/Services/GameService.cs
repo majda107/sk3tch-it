@@ -59,9 +59,20 @@ namespace Sk3tchIt.Services
         public GameRoom DisconnectRoom(string uid)
         {
             var room = this.Rooms.Values.FirstOrDefault(r => r.Users.Keys.Contains(uid));
-            if (room == null) return room;
+            if (room == null) return null;
+            ;
 
             room.DisconnectUser(uid);
+            return room;
+        }
+
+
+        public GameRoom SetReady(string uid, bool state)
+        {
+            var room = this.Rooms.Values.FirstOrDefault(r => r.Users.Keys.Contains(uid));
+            if (room == null) return null;
+
+            room.SetUserReady(uid, state);
             return room;
         }
     }

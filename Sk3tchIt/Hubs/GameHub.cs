@@ -22,6 +22,10 @@ namespace Sk3tchIt.Hubs
             this._gs = gs;
         }
 
+        public async Task<string> Id()
+        {
+            return this.Context.ConnectionId;
+        }
 
         public async Task Join(string roomName, string username)
         {
@@ -32,6 +36,23 @@ namespace Sk3tchIt.Hubs
             await this.Clients.Clients(room.Users.Keys).SendUsers(GameUserDto.FromDict(room.Users));
         }
 
+        public async Task Leave()
+        {
+            // TODO IMPLEMENT ROOM LEAVE
+            throw new NotImplementedException();
+        }
+
+        public async Task Ready(bool state)
+        {
+            var uid = this.Context.ConnectionId;
+            var room = this._gs.SetReady(uid, state);
+
+            // NOTIFY ALL USERS IN A ROOM
+            await this.Clients.Clients(room.Users.Keys).SendUsers(GameUserDto.FromDict(room.Users));
+        }
+
+
+        // CONNECTION DISCONNECTION BEHAVIOR
         public override async Task OnDisconnectedAsync(Exception? exception)
         {
             var uid = this.Context.ConnectionId;
