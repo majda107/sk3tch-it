@@ -22,6 +22,7 @@ import { Connection } from './components/Connection';
 import { connection } from './services/connection.service';
 import { CreateDrawingContext, DrawingContext } from './context/drawing.context';
 import { CreateGameContext, GameContext } from "./context/game.context";
+import { CreateRoomsContext, RoomsContext } from './context/rooms.context';
 
 
 
@@ -34,6 +35,7 @@ function App() {
   const chatCtx = CreateChatContext();
   const drawingCtx = CreateDrawingContext();
   const gameCtx = CreateGameContext();
+  const roomsCtx = CreateRoomsContext();
   const ctx = CreateSignalrContext(connection, usersCtx, chatCtx);
 
 
@@ -60,26 +62,28 @@ function App() {
     <div className="App">
       <Router>
         <UsersContext.Provider value={usersCtx}>
-          <ChatContext.Provider value={chatCtx}>
-            <DrawingContext.Provider value={drawingCtx}>
-              <GameContext.Provider value={gameCtx}>
-                <SignalrContext.Provider value={ctx} >
+          <RoomsContext.Provider value={roomsCtx}>
+            <ChatContext.Provider value={chatCtx}>
+              <DrawingContext.Provider value={drawingCtx}>
+                <GameContext.Provider value={gameCtx}>
+                  <SignalrContext.Provider value={ctx} >
 
-                  <Connection />
+                    <Connection />
 
-                  <Switch>
-                    <Route exact path="/room/:name">
-                      <Room />
-                    </Route>
-                    <Route path="/">
-                      <Rooms />
-                    </Route>
-                  </Switch>
+                    <Switch>
+                      <Route exact path="/room/:name">
+                        <Room />
+                      </Route>
+                      <Route path="/">
+                        <Rooms />
+                      </Route>
+                    </Switch>
 
-                </SignalrContext.Provider>
-              </GameContext.Provider>
-            </DrawingContext.Provider>
-          </ChatContext.Provider>
+                  </SignalrContext.Provider>
+                </GameContext.Provider>
+              </DrawingContext.Provider>
+            </ChatContext.Provider>
+          </RoomsContext.Provider>
         </UsersContext.Provider>
       </Router>
     </div >

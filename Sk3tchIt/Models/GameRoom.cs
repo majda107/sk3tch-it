@@ -119,6 +119,9 @@ namespace Sk3tchIt.Models
         // QUESS WORD
         public bool QuessWord(string uid, string word)
         {
+            // CAN'T GUESS ROOM THAT'S NOT RUNNING
+            if (!this.State.Running) return false;
+
             // DRAWER CANNOT GUESS THE WORD
             if (this.Drawing == uid) return false;
 

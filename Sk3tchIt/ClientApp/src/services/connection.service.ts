@@ -2,6 +2,7 @@ import * as signalR from "@aspnet/signalr";
 import { ChatContext } from "../context/chat.context";
 import { DrawingContext } from "../context/drawing.context";
 import { GameContext } from "../context/game.context";
+import { RoomsContext } from "../context/rooms.context";
 import { UsersContext } from "../context/users.context";
 import { PencilStrokeModel } from "../models/pencil-stroke.model";
 import { UserModel } from "../models/user.model";
@@ -29,6 +30,7 @@ export const ctxState = {
     usersCtx: {} as UsersContext,
     drawingCtx: {} as DrawingContext,
     gameCtx: {} as GameContext,
+    roomsCtx: {} as RoomsContext,
 
     canvas: {} as CanvasRenderingContext2D
 };
@@ -78,4 +80,8 @@ connection.on("tick", (left: number) => {
 connection.on("stop", () => {
     ctxState.gameCtx.setRunning(false);
     ctxState.drawingCtx.clear();
+});
+
+connection.on("sendRooms", rooms => {
+    ctxState.roomsCtx.setRooms(rooms);
 });
