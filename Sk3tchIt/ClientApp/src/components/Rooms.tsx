@@ -10,9 +10,16 @@ export function Rooms(): JSX.Element {
 
     const roomsCtx = useContext(RoomsContext);
 
-    async function joinRoom() {
+    async function createRoom() {
         if (!room) return; // INVALID ROOM NAME
-        history.push(`/room/${room}`);
+
+        const res: boolean = await connection.invoke("create", room);
+        if (res) {
+            history.push(`/room/${room}`);
+        } else {
+            console.log("Room already exists!");
+        }
+
     }
 
     async function loadRooms() {
@@ -34,7 +41,7 @@ export function Rooms(): JSX.Element {
         <form>
             <input type="text" placeholder="room123" {...bindRoom} />
 
-            <button type="button" className="btn btn-primary" onClick={joinRoom}>Join {room}</button>
+            <button type="button" className="btn btn-primary" onClick={createRoom}>Create {room}</button>
         </form>
 
         <ul>
