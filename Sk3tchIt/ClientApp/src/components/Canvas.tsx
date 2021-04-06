@@ -10,7 +10,7 @@ export function Canvas(): JSX.Element {
     const canvas = useRef({} as HTMLCanvasElement)
     const [context, setContext] = useState({} as CanvasRenderingContext2D);
 
-    const [color, setColor, bindColor] = useInput("");
+    const [color, setColor, bindColor] = useInput("#000000");
     const [width, setWidth, bindWidth] = useInput(1.0);
 
     const [lastX, setLastX] = useState(0);
@@ -23,6 +23,8 @@ export function Canvas(): JSX.Element {
         const x = e.clientX - (canvas?.current?.offsetLeft ?? 0);
         const y = e.clientY - (canvas?.current?.offsetTop ?? 0);
 
+        const w = parseFloat(width);
+
         if (drawingCtx.drawing == signalrCtx.id) {
             if (e.buttons == 1) {
                 context.strokeStyle = color as string;
@@ -34,12 +36,14 @@ export function Canvas(): JSX.Element {
                 context.stroke();
                 context.closePath();
 
+
+                console.log(width);
                 // SEND DRAWING TO OTHER USERS
-                connection.invoke("draw", ({ x, y, down: true, color, width } as PencilStrokeModel));
+                connection.invoke("draw", ({ x, y, down: true, color, width: w } as PencilStrokeModel));
             } else {
 
                 // SEND MOUSE MOVE TO OTHER USERS
-                connection.invoke("draw", ({ x, y, down: false, color, width } as PencilStrokeModel));
+                connection.invoke("draw", ({ x, y, down: false, color, width: w } as PencilStrokeModel));
             }
         }
 
