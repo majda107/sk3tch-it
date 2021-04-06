@@ -126,7 +126,7 @@ namespace Sk3tchIt.Services
             {
                 // IF EVERYONE HAS GUESSED
                 if (room.Users.Where(u => u.Key != room.Drawing).All(u => u.Value.HasGuessed))
-                    room.TryStopRoom();
+                    room.TryStopRoom(); // TODO FIX, NEED TO PROCESS NEXT PLAYER
 
                 // UPDATE ALL USERS (because of points)
                 await this._hub.Clients.Clients(room.Users.Keys).SendUsers(GameUserDto.FromDict(room.Users));
