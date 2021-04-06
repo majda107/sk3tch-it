@@ -7,5 +7,7 @@ namespace Sk3tchIt.Models
 
         public bool Down { get; set; }
         public string Color { get; set; }
+
+        public float Width { get; set; }
     }
 }

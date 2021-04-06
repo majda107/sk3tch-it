@@ -11,6 +11,7 @@ export function Canvas(): JSX.Element {
     const [context, setContext] = useState({} as CanvasRenderingContext2D);
 
     const [color, setColor, bindColor] = useInput("");
+    const [width, setWidth, bindWidth] = useInput(1.0);
 
     const [lastX, setLastX] = useState(0);
     const [lastY, setLastY] = useState(0);
@@ -25,6 +26,7 @@ export function Canvas(): JSX.Element {
         if (drawingCtx.drawing == signalrCtx.id) {
             if (e.buttons == 1) {
                 context.strokeStyle = color as string;
+                context.lineWidth = width as number;
 
                 context.beginPath();
                 context.moveTo(lastX, lastY);
@@ -33,11 +35,11 @@ export function Canvas(): JSX.Element {
                 context.closePath();
 
                 // SEND DRAWING TO OTHER USERS
-                connection.invoke("draw", ({ x, y, down: true, color } as PencilStrokeModel));
+                connection.invoke("draw", ({ x, y, down: true, color, width } as PencilStrokeModel));
             } else {
 
                 // SEND MOUSE MOVE TO OTHER USERS
-                connection.invoke("draw", ({ x, y, down: false, color } as PencilStrokeModel));
+                connection.invoke("draw", ({ x, y, down: false, color, width } as PencilStrokeModel));
             }
         }
 
@@ -56,5 +58,6 @@ export function Canvas(): JSX.Element {
         </canvas>
 
         <input type="color" {...bindColor} />
+        <input type="range" min="0.1" max="5" step="0.2" {...bindWidth} />
     </div>;
 }

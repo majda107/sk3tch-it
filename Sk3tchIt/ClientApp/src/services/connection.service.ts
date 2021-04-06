@@ -72,6 +72,7 @@ connection.on("draw", (stroke: PencilStrokeModel) => {
 
     if (stroke.down && lastX >= 0 && lastY >= 0 && stroke.x >= 0 && stroke.y >= 0) {
         canvas.strokeStyle = stroke.color;
+        canvas.lineWidth = stroke.width;
 
         canvas.beginPath();
         canvas.moveTo(lastX, lastY);
