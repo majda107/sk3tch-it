@@ -57,6 +57,9 @@ connection.on("start", (drawing) => {
 
     ctxState.drawingCtx.setDrawing(drawing);
     ctxState.gameCtx.setRunning(true);
+
+    // INITIAL CANVAS CLEAR
+    clearCanvas(ctxState.canvasEl, ctxState.canvas);
 });
 
 connection.on("word", (word: string) => {
@@ -70,12 +73,10 @@ let lastX = 0;
 let lastY = 0;
 
 connection.on("draw", (stroke: PencilStrokeModel) => {
-    const canvas = ctxState.canvas;
-
     if (stroke.action == "draw" && lastX >= 0 && lastY >= 0 && stroke.x >= 0 && stroke.y >= 0) {
-        drawCanvas(canvas, stroke, lastX, lastY);
+        drawCanvas(ctxState.canvas, stroke, lastX, lastY);
     } else if (stroke.action == "clear") {
-        clearCanvas(ctxState.canvasEl, canvas);
+        clearCanvas(ctxState.canvasEl, ctxState.canvas);
     }
 
     lastX = stroke.x;
@@ -91,6 +92,9 @@ connection.on("tick", (left: number) => {
 connection.on("stop", () => {
     ctxState.gameCtx.setRunning(false);
     ctxState.drawingCtx.clear();
+
+    // CLEAR CANVAS ON GAME END
+    clearCanvas(ctxState.canvasEl, ctxState.canvas);
 });
 
 connection.on("sendRooms", rooms => {

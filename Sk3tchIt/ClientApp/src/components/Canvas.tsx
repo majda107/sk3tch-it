@@ -1,10 +1,12 @@
-import { useContext, useEffect, useRef, useState } from "react"
+import { useContext, useEffect, useLayoutEffect, useRef, useState } from "react"
 import { DrawingContext } from "../context/drawing.context";
 import { SignalrContext } from "../context/signalr.context";
 import { useInput } from "../hooks/input.hook";
 import { PencilStrokeModel } from "../models/pencil-stroke.model";
 import { clearCanvas, drawCanvas } from "../services/canvas.service";
 import { connection, ctxState } from "../services/connection.service";
+
+import "./Canvas.css";
 
 export function Canvas(): JSX.Element {
 
@@ -52,6 +54,13 @@ export function Canvas(): JSX.Element {
         connection.invoke("draw", ({ x: 0, y: 0, action: "clear", color, width: 0 } as PencilStrokeModel));
     }
 
+    async function resizeCanvas() {
+        const box = canvas.current.getBoundingClientRect();
+
+        canvas.current.width = box.width;
+        canvas.current.height = box.height;
+    }
+
     useEffect(() => {
         const ctx = canvas.current.getContext('2d') as CanvasRenderingContext2D;
         setContext(ctx);
@@ -60,12 +69,20 @@ export function Canvas(): JSX.Element {
         ctxState.canvasEl = canvas.current;
     })
 
+    // HOOK ON WINDOW RESIZE
+    useLayoutEffect(() => {
+        window.addEventListener("resize", resizeCanvas);
+        resizeCanvas(); // INITIAL CANVAS RESIZE
+
+        return () => window.removeEventListener('resize', resizeCanvas);
+    }, [])
+
     return <div>
         <canvas ref={canvas} style={{ border: "1px solid black" }} onMouseMove={mouseMove}>
         </canvas>
 
         <input type="color" {...bindColor} />
-        <input type="range" min="0.1" max="5" step="0.2" {...bindWidth} />
+        <input type="range" min="0.1" max="10" step="0.2" {...bindWidth} />
         <button className="btn btn-secondary" onClick={clear}>Clear</button>
     </div>;
 }

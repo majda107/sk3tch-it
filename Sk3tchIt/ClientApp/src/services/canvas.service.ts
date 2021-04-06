@@ -8,6 +8,7 @@ export function clearCanvas(canvas: HTMLCanvasElement, context: CanvasRenderingC
 export function drawCanvas(context: CanvasRenderingContext2D, stroke: PencilStrokeModel, lastX: number, lastY: number) {
     context.strokeStyle = stroke.color as string;
     context.lineWidth = stroke.width as number;
+    context.lineCap = "round";
 
     context.beginPath();
     context.moveTo(lastX, lastY);
