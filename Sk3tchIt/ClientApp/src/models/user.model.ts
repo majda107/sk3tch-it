@@ -1,5 +1,6 @@
 export interface UserModel {
     uid: string,
     name: string,
-    ready: boolean
+    ready: boolean,
+    points: number
 }

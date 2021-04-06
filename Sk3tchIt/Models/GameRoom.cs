@@ -132,6 +132,12 @@ namespace Sk3tchIt.Models
             if (word.ToLower() == this.State.Word.ToLower() && this.Users.ContainsKey(uid) &&
                 !this.Users[uid].HasGuessed)
             {
+                // ADD POINTS TO GUESSER
+                this.Users[uid].Points += 3;
+
+                // ADD POINTS TO ONE WHO IS DRAWING
+                this.Users.FirstOrDefault(u => u.Key == this.Drawing).Value.Points += 1;
+
                 this.Users[uid].HasGuessed = true;
                 return true;
             }

@@ -32,7 +32,7 @@ export function RoomUsers(): JSX.Element {
                     <span>[YOU] </span>
                 }
 
-                <span>{u.name} [{u.ready ? 'ready' : 'pending'}]</span>
+                <span>{u.name} [{u.ready ? 'ready' : 'pending'}] ({u.points})</span>
             </li>)}
         </ul>
     </div>

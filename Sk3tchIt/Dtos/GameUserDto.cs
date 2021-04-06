@@ -9,6 +9,7 @@ namespace Sk3tchIt.Dtos
         public string Uid { get; set; }
         public string Name { get; set; }
         public bool Ready { get; set; }
+        public int Points { get; set; }
 
 
         // HELPER METHOD FOR DTO CONVERSION
@@ -17,7 +18,7 @@ namespace Sk3tchIt.Dtos
             var users = dict.Keys.Select(k =>
             {
                 var user = dict[k];
-                return new GameUserDto {Uid = k, Name = user.Name, Ready = user.Ready};
+                return new GameUserDto {Uid = k, Name = user.Name, Ready = user.Ready, Points = user.Points};
             }).ToList();
 
             return users;

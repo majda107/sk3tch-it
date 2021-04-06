@@ -102,6 +102,9 @@ namespace Sk3tchIt.Services
                 if (room.Users.Where(u => u.Key != room.Drawing).All(u => u.Value.HasGuessed))
                     room.TryStopRoom();
 
+                // UPDATE ALL USERS (because of points)
+                await this._hub.Clients.Clients(room.Users.Keys).SendUsers(GameUserDto.FromDict(room.Users));
+
                 await this._hub.Clients.Clients(room.Users.Keys)
                     .SendMessage("server", "{SOMEONE} has guessed the word");
             }
