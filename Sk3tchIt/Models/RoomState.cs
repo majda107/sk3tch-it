@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace Sk3tchIt.Models
 {
     public class RoomState

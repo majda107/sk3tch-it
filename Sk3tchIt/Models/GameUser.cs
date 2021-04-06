@@ -4,9 +4,10 @@ namespace Sk3tchIt.Models
     {
         public string Name { get; set; }
         public bool Ready { get; set; }
+        public int Points { get; set; }
 
         public bool HasGuessed { get; set; }
-        public int Points { get; set; }
+        public bool HasPlayed { get; set; }
 
 
         public GameUser(string name)
@@ -15,7 +16,6 @@ namespace Sk3tchIt.Models
             this.Ready = false;
 
             this.HasGuessed = false;
-            this.Points = 0;
             this.Points = 0;
         }
     }

@@ -4,11 +4,13 @@ using System.Linq;
 using System.Timers;
 using Microsoft.EntityFrameworkCore.Design;
 using Sk3tchIt.Extension;
+using Sk3tchIt.Services;
 
 namespace Sk3tchIt.Models
 {
     public class GameRoom
     {
+        private readonly WordService _ws;
         public readonly string Name;
 
         public Dictionary<string, GameUser> Users { get; set; } = new Dictionary<string, GameUser>();
@@ -24,8 +26,10 @@ namespace Sk3tchIt.Models
         public event EventHandler<int> Tick;
         public event EventHandler Stopped;
 
-        public GameRoom(string name)
+        public GameRoom(string name, WordService ws)
         {
+            this._ws = ws;
+
             this.Name = name;
             this.State = new RoomState();
 
@@ -35,8 +39,9 @@ namespace Sk3tchIt.Models
                 left -= 1;
                 Tick?.Invoke(this, left);
 
-                if (left <= 0)
-                    this.TryStopRoom();
+                if (left <= 0) // TIMER HAS FINISHED
+                    if (!TryProcessNextPlayer()) // NOONE CAN PLAY
+                        this.TryStopRoom(); // STOP GAME
             };
         }
 
@@ -81,20 +86,17 @@ namespace Sk3tchIt.Models
 
 
         // TRY TO START THE ROOM, RETURNS THE ONE WHO IS DRAWING
-        public bool TryStartRoom(out string drawing, string word)
+        public bool TryStartRoom(out string drawing)
         {
             drawing = null;
 
             if (!this.State.Running && this.Users.Count >= 2 && this.Users.Values.All(u => u.Ready))
             {
-                // RESET USER GUESSES
+                // NOONE HAS PLAYED YET
                 foreach (var user in this.Users.Values)
-                    user.HasGuessed = false;
+                    user.HasPlayed = false;
 
-                this.State.Start(word);
-                this.Drawing = this.Users.Keys.ToList().Random();
-
-                this.left = 30; // SET LEFT TIME
+                this.TryProcessNextPlayer();
                 this.timer.Start();
 
                 drawing = this.Drawing;
@@ -102,6 +104,27 @@ namespace Sk3tchIt.Models
             }
 
             return false;
+        }
+
+
+        // TRIES TO PROCESS NEXT PLAYER
+        private bool TryProcessNextPlayer()
+        {
+            // RESET USER GUESSES
+            foreach (var user in this.Users.Values)
+                user.HasGuessed = false;
+
+            this.State.Start(this._ws.GetWord());
+
+            var potentialPlayers = this.Users.Where(u => !u.Value.HasPlayed).ToList();
+            if (potentialPlayers.Count <= 0) return false;
+
+            this.Drawing = potentialPlayers.Random().Key;
+            this.Users[this.Drawing].HasPlayed = true;
+
+            this.left = 30; // SET LEFT TIME
+
+            return true;
         }
 
 

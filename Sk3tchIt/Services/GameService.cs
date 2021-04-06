@@ -32,7 +32,7 @@ namespace Sk3tchIt.Services
 
         private void CreateRoom(string name)
         {
-            var room = new GameRoom(name);
+            var room = new GameRoom(name, this._ws);
             this.Rooms.Add(name, room);
 
             // HOOK THE ROOM FOR TICK EVENT
@@ -105,7 +105,7 @@ namespace Sk3tchIt.Services
             await this._hub.Clients.Clients(room.Users.Keys).SendUsers(GameUserDto.FromDict(room.Users));
 
             // START GAME IF ALL USERS ARE READY
-            if (room.TryStartRoom(out string drawing, _ws.GetWord()))
+            if (room.TryStartRoom(out string drawing))
             {
                 await this._hub.Clients.Clients(room.Users.Keys).Start(drawing);
                 await this._hub.Clients.Clients(drawing).Word(room.State.Word);
