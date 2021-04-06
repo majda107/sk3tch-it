@@ -63,7 +63,6 @@ namespace Sk3tchIt.Services
         {
             var room = this.Rooms.Values.FirstOrDefault(r => r.Users.Keys.Contains(uid));
             if (room == null) return null;
-            ;
 
             room.DisconnectUser(uid);
             return room;

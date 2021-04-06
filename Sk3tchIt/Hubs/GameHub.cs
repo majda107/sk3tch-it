@@ -48,8 +48,8 @@ namespace Sk3tchIt.Hubs
 
         public async Task Leave()
         {
-            // TODO IMPLEMENT ROOM LEAVE
-            throw new NotImplementedException();
+            var uid = this.Context.ConnectionId;
+            this._gs.DisconnectRoom(uid);
         }
 
 

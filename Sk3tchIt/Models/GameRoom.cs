@@ -62,6 +62,9 @@ namespace Sk3tchIt.Models
         {
             if (this.Users.ContainsKey(uid))
                 this.Users.Remove(uid);
+
+            if (this.State.Running && this.Drawing == uid)
+                this.TryStopRoom();
         }
 
 
