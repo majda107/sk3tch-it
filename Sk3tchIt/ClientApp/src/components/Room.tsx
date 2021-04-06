@@ -1,8 +1,9 @@
 import { useContext, useState } from "react";
-import { useParams } from "react-router";
+import { useHistory, useParams } from "react-router";
 import { GameContext } from "../context/game.context";
 import { SignalrContext } from "../context/signalr.context";
 import { useInput } from "../hooks/input.hook";
+import { ctxState } from "../services/connection.service";
 import { RoomChat } from "./RoomChat";
 import { RoomDrawing } from "./RoomDrawing";
 import { RoomUsers } from "./RoomUsers";
@@ -13,6 +14,7 @@ interface RouteParams {
 
 export function Room(): JSX.Element {
     const params = useParams<RouteParams>();
+    const history = useHistory();
 
     const ctx = useContext(SignalrContext);
     const gameCtx = useContext(GameContext);
@@ -25,6 +27,12 @@ export function Room(): JSX.Element {
         gameCtx.setRunning(running);
 
         setJoined(true);
+    }
+
+    async function leave() {
+        await ctx.connection.invoke("leave");
+        ctxState.clear();
+        history.push('/');
     }
 
 
@@ -51,5 +59,7 @@ export function Room(): JSX.Element {
         <hr />
 
         <RoomChat />
+
+        <button className="btn btn-small btn-secondary" onClick={leave}>Leave</button>
     </div>;
 }

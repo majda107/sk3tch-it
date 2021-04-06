@@ -32,7 +32,10 @@ export const ctxState = {
     gameCtx: {} as GameContext,
     roomsCtx: {} as RoomsContext,
 
-    canvas: {} as CanvasRenderingContext2D
+    canvas: {} as CanvasRenderingContext2D,
+    clear: () => {
+        ctxState.drawingCtx.clear();
+    }
 };
 
 export const connection = new signalR.HubConnectionBuilder().withUrl(`/gamehub`).build();
@@ -52,7 +55,11 @@ connection.on("start", (drawing) => {
 
     ctxState.drawingCtx.setDrawing(drawing);
     ctxState.gameCtx.setRunning(true);
-})
+});
+
+connection.on("word", (word: string) => {
+    ctxState.drawingCtx.setWord(word);
+});
 
 
 // DRAW CONNECTION, TODO MAKE CLEANER / SELF CONTAINED
