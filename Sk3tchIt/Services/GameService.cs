@@ -41,6 +41,13 @@ namespace Sk3tchIt.Services
             // HOOK FOR ROOM STOP
             room.Stopped += async (o, e) => await this._hub.Clients.Clients(room.Users.Keys).Stop();
 
+            // HOOK FOR START
+            room.Started += async (o, drawing) =>
+            {
+                await this._hub.Clients.Clients(room.Users.Keys).Start(drawing);
+                await this._hub.Clients.Clients(drawing).Word(room.State.Word);
+            };
+
             // REFRESH ALL CLIENT ROOMS
             this._hub.Clients.All.SendRooms(this.Rooms.Keys.ToList());
         }
@@ -105,11 +112,7 @@ namespace Sk3tchIt.Services
             await this._hub.Clients.Clients(room.Users.Keys).SendUsers(GameUserDto.FromDict(room.Users));
 
             // START GAME IF ALL USERS ARE READY
-            if (room.TryStartRoom(out string drawing))
-            {
-                await this._hub.Clients.Clients(room.Users.Keys).Start(drawing);
-                await this._hub.Clients.Clients(drawing).Word(room.State.Word);
-            }
+            room.TryStartRoom(out string drawing);
         }
 
 
@@ -142,6 +145,7 @@ namespace Sk3tchIt.Services
         // DRAW
         public async Task Draw(string uid, PencilStroke pencilStroke)
         {
+            // IS THERE SOMEONE DRAWING WITH THIS UID?
             var room = this.Rooms.Values.FirstOrDefault(r => r.Drawing == uid);
             if (room == null) return;
 

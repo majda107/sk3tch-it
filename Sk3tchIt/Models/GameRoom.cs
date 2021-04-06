@@ -24,6 +24,7 @@ namespace Sk3tchIt.Models
         private int left = 30;
 
         public event EventHandler<int> Tick;
+        public event EventHandler<string> Started;
         public event EventHandler Stopped;
 
         public GameRoom(string name, WordService ws)
@@ -123,6 +124,9 @@ namespace Sk3tchIt.Models
             this.Users[this.Drawing].HasPlayed = true;
 
             this.left = 30; // SET LEFT TIME
+
+            // INVOKE STARTED EVENT
+            this.Started?.Invoke(this, this.Drawing);
 
             return true;
         }
