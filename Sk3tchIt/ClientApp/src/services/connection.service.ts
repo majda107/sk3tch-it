@@ -6,6 +6,7 @@ import { RoomsContext } from "../context/rooms.context";
 import { UsersContext } from "../context/users.context";
 import { PencilStrokeModel } from "../models/pencil-stroke.model";
 import { UserModel } from "../models/user.model";
+import { clearCanvas, drawCanvas } from "./canvas.service";
 // import { CONSTS } from "../models/consts";
 
 
@@ -31,11 +32,12 @@ export const ctxState = {
     drawingCtx: {} as DrawingContext,
     gameCtx: {} as GameContext,
     roomsCtx: {} as RoomsContext,
-
-    canvas: {} as CanvasRenderingContext2D,
     clear: () => {
         ctxState.drawingCtx.clear();
-    }
+    },
+
+    canvas: {} as CanvasRenderingContext2D,
+    canvasEl: {} as HTMLCanvasElement
 };
 
 export const connection = new signalR.HubConnectionBuilder().withUrl(`/gamehub`).build();
@@ -70,15 +72,10 @@ let lastY = 0;
 connection.on("draw", (stroke: PencilStrokeModel) => {
     const canvas = ctxState.canvas;
 
-    if (stroke.down && lastX >= 0 && lastY >= 0 && stroke.x >= 0 && stroke.y >= 0) {
-        canvas.strokeStyle = stroke.color;
-        canvas.lineWidth = stroke.width;
-
-        canvas.beginPath();
-        canvas.moveTo(lastX, lastY);
-        canvas.lineTo(stroke.x, stroke.y);
-        canvas.stroke();
-        canvas.closePath();
+    if (stroke.action == "draw" && lastX >= 0 && lastY >= 0 && stroke.x >= 0 && stroke.y >= 0) {
+        drawCanvas(canvas, stroke, lastX, lastY);
+    } else if (stroke.action == "clear") {
+        clearCanvas(ctxState.canvasEl, canvas);
     }
 
     lastX = stroke.x;

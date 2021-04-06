@@ -3,6 +3,7 @@ import { DrawingContext } from "../context/drawing.context";
 import { SignalrContext } from "../context/signalr.context";
 import { useInput } from "../hooks/input.hook";
 import { PencilStrokeModel } from "../models/pencil-stroke.model";
+import { clearCanvas, drawCanvas } from "../services/canvas.service";
 import { connection, ctxState } from "../services/connection.service";
 
 export function Canvas(): JSX.Element {
@@ -27,23 +28,16 @@ export function Canvas(): JSX.Element {
 
         if (drawingCtx.drawing == signalrCtx.id) {
             if (e.buttons == 1) {
-                context.strokeStyle = color as string;
-                context.lineWidth = width as number;
-
-                context.beginPath();
-                context.moveTo(lastX, lastY);
-                context.lineTo(x, y);
-                context.stroke();
-                context.closePath();
+                const pencil = ({ x, y, action: "draw", color, width: w } as PencilStrokeModel);
+                drawCanvas(context, pencil, lastX, lastY);
 
 
-                console.log(width);
                 // SEND DRAWING TO OTHER USERS
-                connection.invoke("draw", ({ x, y, down: true, color, width: w } as PencilStrokeModel));
+                connection.invoke("draw", pencil);
             } else {
 
                 // SEND MOUSE MOVE TO OTHER USERS
-                connection.invoke("draw", ({ x, y, down: false, color, width: w } as PencilStrokeModel));
+                connection.invoke("draw", ({ x, y, action: "none", color, width: w } as PencilStrokeModel));
             }
         }
 
@@ -51,10 +45,19 @@ export function Canvas(): JSX.Element {
         setLastY(y);
     }
 
+    async function clear() {
+        clearCanvas(canvas.current, context);
+
+        // SEND CLEAR TO OTHER USERS
+        connection.invoke("draw", ({ x: 0, y: 0, action: "clear", color, width: 0 } as PencilStrokeModel));
+    }
+
     useEffect(() => {
         const ctx = canvas.current.getContext('2d') as CanvasRenderingContext2D;
         setContext(ctx);
+
         ctxState.canvas = ctx;
+        ctxState.canvasEl = canvas.current;
     })
 
     return <div>
@@ -63,5 +66,6 @@ export function Canvas(): JSX.Element {
 
         <input type="color" {...bindColor} />
         <input type="range" min="0.1" max="5" step="0.2" {...bindWidth} />
+        <button className="btn btn-secondary" onClick={clear}>Clear</button>
     </div>;
 }

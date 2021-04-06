@@ -14,7 +14,7 @@ export function RoomDrawing(): JSX.Element {
 
         {
             signlarCtx.id == ctx.drawing &&
-            <span>You are drawing: {ctx.word}</span>
+            <p>You are drawing: {ctx.word}</p>
         }
 
         <b>{usersCtx.users.find(u => u.uid == ctx.drawing)?.name ?? '-'} is drawing</b>
