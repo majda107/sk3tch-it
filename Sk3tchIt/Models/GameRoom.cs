@@ -109,7 +109,7 @@ namespace Sk3tchIt.Models
 
 
         // TRIES TO PROCESS NEXT PLAYER
-        private bool TryProcessNextPlayer()
+        public bool TryProcessNextPlayer()
         {
             // RESET USER GUESSES
             foreach (var user in this.Users.Values)
