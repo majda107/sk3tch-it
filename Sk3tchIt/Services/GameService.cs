@@ -32,7 +32,7 @@ namespace Sk3tchIt.Services
 
         private void CreateRoom(string name)
         {
-            var room = new GameRoom();
+            var room = new GameRoom(name);
             this.Rooms.Add(name, room);
 
             // HOOK THE ROOM FOR TICK EVENT
@@ -40,6 +40,15 @@ namespace Sk3tchIt.Services
 
             // HOOK FOR ROOM STOP
             room.Stopped += async (o, e) => await this._hub.Clients.Clients(room.Users.Keys).Stop();
+
+            // REFRESH ALL CLIENT ROOMS
+            this._hub.Clients.All.SendRooms(this.Rooms.Keys.ToList());
+        }
+
+        private void RemoveRoom(GameRoom room)
+        {
+            if (this.Rooms.ContainsKey(room.Name))
+                this.Rooms.Remove(room.Name);
 
             // REFRESH ALL CLIENT ROOMS
             this._hub.Clients.All.SendRooms(this.Rooms.Keys.ToList());
@@ -58,13 +67,14 @@ namespace Sk3tchIt.Services
         }
 
         // DISCONNECTS USER FROM A ROOM
-        // TODO ROOM HAS 0 USERS -> DELETE
         public async Task DisconnectRoom(string uid)
         {
             var room = this.Rooms.Values.FirstOrDefault(r => r.Users.Keys.Contains(uid));
             if (room == null) return;
 
             room.DisconnectUser(uid);
+            if (room.Users.Count <= 0) // REMOVE ROOM IF EMPTY
+                this.RemoveRoom(room);
 
             // UPDATE ALL USERS
             await this._hub.Clients.Clients(room.Users.Keys).SendUsers(GameUserDto.FromDict(room.Users));

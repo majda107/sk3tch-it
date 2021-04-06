@@ -9,6 +9,8 @@ namespace Sk3tchIt.Models
 {
     public class GameRoom
     {
+        public readonly string Name;
+
         public Dictionary<string, GameUser> Users { get; set; } = new Dictionary<string, GameUser>();
 
         // public bool Running { get; set; }
@@ -22,8 +24,9 @@ namespace Sk3tchIt.Models
         public event EventHandler<int> Tick;
         public event EventHandler Stopped;
 
-        public GameRoom()
+        public GameRoom(string name)
         {
+            this.Name = name;
             this.State = new RoomState();
 
             this.timer.AutoReset = true;
