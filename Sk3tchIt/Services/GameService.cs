@@ -81,7 +81,10 @@ namespace Sk3tchIt.Services
 
             // START GAME IF ALL USERS ARE READY
             if (room.TryStartRoom(out string drawing))
+            {
                 await this._hub.Clients.Clients(room.Users.Keys).Start(drawing);
+                await this._hub.Clients.Clients(drawing).Word(room.State.Word);
+            }
         }
 
 

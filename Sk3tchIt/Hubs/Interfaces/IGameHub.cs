@@ -16,6 +16,8 @@ namespace Sk3tchIt.Hubs.Interfaces
         Task Stop();
 
         Task Draw(PencilStroke pencilStroke);
+        Task Word(string word);
+
         Task Tick(int left);
     }
 }
