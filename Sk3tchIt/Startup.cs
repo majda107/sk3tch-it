@@ -56,6 +56,7 @@ namespace Sk3tchIt
             services.AddControllersWithViews();
 
             services.AddSignalR();
+            services.AddSingleton<WordService>();
             services.AddSingleton<GameService>();
         }
 

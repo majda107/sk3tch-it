@@ -15,18 +15,18 @@ namespace Sk3tchIt.Services
     public class GameService
     {
         private readonly IHubContext<GameHub, IGameHub> _hub;
-        // private readonly ILogger _logger;
-
+        private readonly WordService _ws;
 
         public Dictionary<string, GameRoom> Rooms { get; set; } = new Dictionary<string, GameRoom>();
 
 
         // public GameService(IHubContext<GameHub, IGameHub> hub, ILogger logger)
-        public GameService(IHubContext<GameHub, IGameHub> hub)
+        public GameService(IHubContext<GameHub, IGameHub> hub, WordService ws)
         {
             // this._logger = logger;
 
             this._hub = hub;
+            this._ws = ws;
         }
 
 
@@ -82,7 +82,7 @@ namespace Sk3tchIt.Services
             await this._hub.Clients.Clients(room.Users.Keys).SendUsers(GameUserDto.FromDict(room.Users));
 
             // START GAME IF ALL USERS ARE READY
-            if (room.TryStartRoom(out string drawing))
+            if (room.TryStartRoom(out string drawing, _ws.GetWord()))
             {
                 await this._hub.Clients.Clients(room.Users.Keys).Start(drawing);
                 await this._hub.Clients.Clients(drawing).Word(room.State.Word);

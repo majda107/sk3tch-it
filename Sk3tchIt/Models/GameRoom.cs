@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Timers;
 using Microsoft.EntityFrameworkCore.Design;
+using Sk3tchIt.Extension;
 
 namespace Sk3tchIt.Models
 {
@@ -77,7 +78,7 @@ namespace Sk3tchIt.Models
 
 
         // TRY TO START THE ROOM, RETURNS THE ONE WHO IS DRAWING
-        public bool TryStartRoom(out string drawing)
+        public bool TryStartRoom(out string drawing, string word)
         {
             drawing = null;
 
@@ -87,8 +88,8 @@ namespace Sk3tchIt.Models
                 foreach (var user in this.Users.Values)
                     user.HasGuessed = false;
 
-                this.State.Running = true;
-                this.Drawing = this.Users.Keys.First();
+                this.State.Start(word);
+                this.Drawing = this.Users.Keys.ToList().Random();
 
                 this.left = 30; // SET LEFT TIME
                 this.timer.Start();
