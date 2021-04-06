@@ -1,0 +1,7 @@
+.chat {
+    display: flex;
+    flex-flow: column;
+
+    height: 140px;
+    overflow-y: scroll;
+}

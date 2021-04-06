@@ -1,10 +1,12 @@
-import { useContext, useEffect } from "react"
+import { useContext, useEffect, useRef } from "react"
 import { ChatContext } from "../context/chat.context"
 import { SignalrContext } from "../context/signalr.context";
 import { UsersContext } from "../context/users.context";
 import { useInput } from "../hooks/input.hook";
 import { connection } from "../services/connection.service";
 
+
+import "./RoomChat.css"
 
 
 export function RoomChat(): JSX.Element {
@@ -13,6 +15,7 @@ export function RoomChat(): JSX.Element {
 
     const [message, setMessage, bindMessage] = useInput("");
 
+
     async function sendMessage() {
         if (!message) return;
 
@@ -20,10 +23,15 @@ export function RoomChat(): JSX.Element {
         (setMessage as any)("");
     }
 
+    const chat = useRef({} as HTMLUListElement);
+
+    useEffect(() => {
+        chat.current.scrollTo(0, chat.current.scrollHeight);
+    }, [ctx.messages]);
 
 
     return <div>
-        <ul>
+        <ul className="chat" ref={chat}>
             {/* {ctx.messages.map(m => m.message).join()} */}
             {ctx.messages.map((m, i) => <li key={Math.random()}>
                 [{usersCtx.users.find(u => u.uid == m.uid)?.name ?? '-'}] {m.message}
