@@ -68,10 +68,16 @@ let lastX = 0;
 let lastY = 0;
 
 connection.on("draw", (stroke: PencilStrokeModel) => {
+    const canvas = ctxState.canvas;
+
     if (stroke.down && lastX >= 0 && lastY >= 0 && stroke.x >= 0 && stroke.y >= 0) {
-        ctxState.canvas.moveTo(lastX, lastY);
-        ctxState.canvas.lineTo(stroke.x, stroke.y);
-        ctxState.canvas.stroke();
+        canvas.strokeStyle = stroke.color;
+
+        canvas.beginPath();
+        canvas.moveTo(lastX, lastY);
+        canvas.lineTo(stroke.x, stroke.y);
+        canvas.stroke();
+        canvas.closePath();
     }
 
     lastX = stroke.x;
