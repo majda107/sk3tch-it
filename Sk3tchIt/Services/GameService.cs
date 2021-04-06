@@ -54,16 +54,29 @@ namespace Sk3tchIt.Services
             this._hub.Clients.All.SendRooms(this.Rooms.Keys.ToList());
         }
 
-        // JOINS USER A ROOM + CREATES ONE
-        public GameRoom JoinCreateRoom(string roomName, string uid, string username)
+        // JOINS USER A ROOM 
+        public GameRoom JoinRoom(string roomName, string uid, string username)
         {
+            // IF ROOM DOESN'T EXIST
             if (!this.Rooms.ContainsKey(roomName))
-                this.CreateRoom(roomName);
+                return null;
 
             var room = this.Rooms[roomName];
 
             var status = room.JoinUser(uid, username);
             return room;
+        }
+
+        // CREATE ROOM
+        public bool Create(string roomName)
+        {
+            if (!this.Rooms.ContainsKey(roomName))
+            {
+                this.CreateRoom(roomName);
+                return true;
+            }
+
+            return false;
         }
 
         // DISCONNECTS USER FROM A ROOM

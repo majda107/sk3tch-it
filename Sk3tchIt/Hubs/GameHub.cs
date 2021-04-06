@@ -35,15 +35,25 @@ namespace Sk3tchIt.Hubs
             return this._gs.Rooms.Keys.ToList();
         }
 
-        public async Task<bool> Join(string roomName, string username)
+        public async Task<RoomState> Join(string roomName, string username)
         {
             var uid = this.Context.ConnectionId;
-            var room = this._gs.JoinCreateRoom(roomName, uid, username);
+            var room = this._gs.JoinRoom(roomName, uid, username);
+
+            // IF ROOM DOESN'T EXIST
+            if (room == null)
+                return null;
 
             // NOTIFY ALL USERS IN A ROOM
             await this.Clients.Clients(room.Users.Keys).SendUsers(GameUserDto.FromDict(room.Users));
 
-            return room.State.Running;
+            return room.State;
+        }
+
+        public async Task<bool> Create(string roomName)
+        {
+            var status = this._gs.Create(roomName);
+            return status;
         }
 
         public async Task Leave()
