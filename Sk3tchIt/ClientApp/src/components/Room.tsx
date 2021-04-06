@@ -23,6 +23,8 @@ export function Room(): JSX.Element {
     const [joined, setJoined] = useState(false);
 
     async function joinUsername() {
+        if (!username) return; // USERNAME VALID
+
         const running = await ctx.connection.invoke("join", params.name, username);
         gameCtx.setRunning(running);
 
