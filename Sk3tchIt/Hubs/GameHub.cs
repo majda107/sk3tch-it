@@ -49,7 +49,7 @@ namespace Sk3tchIt.Hubs
         public async Task Leave()
         {
             var uid = this.Context.ConnectionId;
-            this._gs.DisconnectRoom(uid);
+            await this._gs.DisconnectRoom(uid);
         }
 
 
@@ -90,10 +90,7 @@ namespace Sk3tchIt.Hubs
         {
             var uid = this.Context.ConnectionId;
 
-            var room = this._gs.DisconnectRoom(uid);
-            if (room != null)
-                await this.Clients.Clients(room.Users.Keys).SendUsers(GameUserDto.FromDict(room.Users));
-
+            await this._gs.DisconnectRoom(uid);
             await base.OnDisconnectedAsync(exception);
         }
 

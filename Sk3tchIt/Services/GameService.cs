@@ -59,13 +59,15 @@ namespace Sk3tchIt.Services
 
         // DISCONNECTS USER FROM A ROOM
         // TODO ROOM HAS 0 USERS -> DELETE
-        public GameRoom DisconnectRoom(string uid)
+        public async Task DisconnectRoom(string uid)
         {
             var room = this.Rooms.Values.FirstOrDefault(r => r.Users.Keys.Contains(uid));
-            if (room == null) return null;
+            if (room == null) return;
 
             room.DisconnectUser(uid);
-            return room;
+
+            // UPDATE ALL USERS
+            await this._hub.Clients.Clients(room.Users.Keys).SendUsers(GameUserDto.FromDict(room.Users));
         }
 
 
