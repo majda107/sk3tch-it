@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { ChatContext } from "../context/chat.context";
 import { DrawingContext } from "../context/drawing.context";
 import { GameContext } from "../context/game.context";
+import { OverlayContext } from "../context/overlay.context";
 import { RoomsContext } from "../context/rooms.context";
 import { SignalrContext } from "../context/signalr.context";
 import { UsersContext } from "../context/users.context";
@@ -16,6 +17,7 @@ export function Connection(): JSX.Element {
     const drawingCtx = useContext(DrawingContext);
     const gameCtx = useContext(GameContext);
     const roomsCtx = useContext(RoomsContext);
+    const overlayCtx = useContext(OverlayContext);
 
     useEffect(() => {
         ctxState.chatCtx = chatCtx;
@@ -23,6 +25,7 @@ export function Connection(): JSX.Element {
         ctxState.drawingCtx = drawingCtx;
         ctxState.gameCtx = gameCtx;
         ctxState.roomsCtx = roomsCtx;
+        ctxState.overlayCtx = overlayCtx;
     });
 
     return <></>;

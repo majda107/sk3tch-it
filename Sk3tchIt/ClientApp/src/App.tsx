@@ -23,6 +23,8 @@ import { connection } from './services/connection.service';
 import { CreateDrawingContext, DrawingContext } from './context/drawing.context';
 import { CreateGameContext, GameContext } from "./context/game.context";
 import { CreateRoomsContext, RoomsContext } from './context/rooms.context';
+import { CreateOverlayContext, OverlayContext } from './context/overlay.context';
+import { Overlay } from './components/Overlay';
 
 
 
@@ -36,6 +38,7 @@ function App() {
   const drawingCtx = CreateDrawingContext();
   const gameCtx = CreateGameContext();
   const roomsCtx = CreateRoomsContext();
+  const overlayCtx = CreateOverlayContext();
   const ctx = CreateSignalrContext(connection, usersCtx, chatCtx);
 
 
@@ -66,20 +69,24 @@ function App() {
             <ChatContext.Provider value={chatCtx}>
               <DrawingContext.Provider value={drawingCtx}>
                 <GameContext.Provider value={gameCtx}>
-                  <SignalrContext.Provider value={ctx} >
+                  <OverlayContext.Provider value={overlayCtx}>
+                    <SignalrContext.Provider value={ctx} >
 
-                    <Connection />
+                      <Connection />
 
-                    <Switch>
-                      <Route exact path="/room/:name">
-                        <Room />
-                      </Route>
-                      <Route path="/">
-                        <Rooms />
-                      </Route>
-                    </Switch>
+                      <Overlay />
 
-                  </SignalrContext.Provider>
+                      <Switch>
+                        <Route exact path="/room/:name">
+                          <Room />
+                        </Route>
+                        <Route path="/">
+                          <Rooms />
+                        </Route>
+                      </Switch>
+
+                    </SignalrContext.Provider>
+                  </OverlayContext.Provider>
                 </GameContext.Provider>
               </DrawingContext.Provider>
             </ChatContext.Provider>

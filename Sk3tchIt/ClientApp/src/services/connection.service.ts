@@ -2,6 +2,7 @@ import * as signalR from "@aspnet/signalr";
 import { ChatContext } from "../context/chat.context";
 import { DrawingContext } from "../context/drawing.context";
 import { GameContext } from "../context/game.context";
+import { OverlayContext } from "../context/overlay.context";
 import { RoomsContext } from "../context/rooms.context";
 import { UsersContext } from "../context/users.context";
 import { PencilStrokeModel } from "../models/pencil-stroke.model";
@@ -32,6 +33,8 @@ export const ctxState = {
     drawingCtx: {} as DrawingContext,
     gameCtx: {} as GameContext,
     roomsCtx: {} as RoomsContext,
+    overlayCtx: {} as OverlayContext,
+
     clear: () => {
         ctxState.drawingCtx.clear();
     },
@@ -53,7 +56,9 @@ connection.on("sendMessage", (uid: string, message: string) => {
 });
 
 connection.on("start", (drawing) => {
-    console.log(drawing);
+
+    // OPEN GAME HAS STARTED OVERLAY
+    ctxState.overlayCtx.openOverlay("The game has started!", 5000);
 
     ctxState.drawingCtx.setDrawing(drawing);
     ctxState.gameCtx.setRunning(true);
