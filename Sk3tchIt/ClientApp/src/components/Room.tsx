@@ -3,6 +3,7 @@ import { useHistory, useParams } from "react-router";
 import { GameContext } from "../context/game.context";
 import { SignalrContext } from "../context/signalr.context";
 import { useInput } from "../hooks/input.hook";
+import { RoomState } from "../models/room-state.model";
 import { ctxState } from "../services/connection.service";
 import { RoomChat } from "./RoomChat";
 import { RoomDrawing } from "./RoomDrawing";
@@ -25,8 +26,13 @@ export function Room(): JSX.Element {
     async function joinUsername() {
         if (!username) return; // USERNAME VALID
 
-        const running = await ctx.connection.invoke("join", params.name, username);
-        gameCtx.setRunning(running);
+        const state: RoomState = await ctx.connection.invoke("join", params.name, username);
+        if (state == null) {
+            alert("Invalid room!");
+            return;
+        }
+
+        gameCtx.setRunning(state.running);
 
         setJoined(true);
     }
