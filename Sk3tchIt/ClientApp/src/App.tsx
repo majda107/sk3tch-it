@@ -1,6 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react';
 import logo from './logo.svg';
-import './App.css';
+
+// import './App.css';
+import './App.scss';
+
 import { CreateSignalrContext, SignalrContext } from './context/signalr.context';
 import * as signalR from "@aspnet/signalr";
 
