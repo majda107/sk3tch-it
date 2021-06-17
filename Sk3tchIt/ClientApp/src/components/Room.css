@@ -3,6 +3,10 @@
     grid-template-areas: "users drawing" "chat chat";
 
     grid-template-columns: auto 1fr;
+    row-gap: 32px;
+    column-gap: 24px;
+
+    padding: 34px;
 }
 
 .room-users {
