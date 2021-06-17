@@ -77,12 +77,20 @@ export function Canvas(): JSX.Element {
         return () => window.removeEventListener('resize', resizeCanvas);
     }, [])
 
-    return <div>
+    return <div className="canvas">
         <canvas ref={canvas} style={{ border: "1px solid black" }} onMouseMove={mouseMove}>
         </canvas>
 
-        <input type="color" {...bindColor} />
-        <input type="range" min="0.1" max="10" step="0.2" {...bindWidth} />
-        <button className="btn btn-secondary" onClick={clear}>Clear</button>
+        <div>
+            <label>Color</label>
+            <input type="color" {...bindColor} />
+        </div>
+
+        <div>
+            <label>Width</label>
+            <input type="range" min="0.1" max="10" step="0.2" {...bindWidth} />
+        </div>
+
+        <button className="btn btn-secondary" onClick={clear}>Clear canvas</button>
     </div>;
 }

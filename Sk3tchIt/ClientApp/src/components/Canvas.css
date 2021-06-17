@@ -2,3 +2,22 @@ canvas {
     width: 800px;
     height: 200px;
 }
+
+.canvas {
+    display: grid;
+    grid-template-columns: repeat(3, auto);
+    row-gap: 24px;
+}
+
+.canvas > canvas {
+    grid-column: 1/4;
+}
+
+.canvas > div {
+    display: flex;
+    align-items: center;
+}
+
+.canvas > div > label {
+    margin-right: 12px;
+}

@@ -17,7 +17,7 @@ export function RoomUsers(): JSX.Element {
     }
 
     return <div>
-        <h2>Lobby users</h2>
+        {/* <h2>Lobby users</h2> */}
 
         {
             !gameCtx.running &&
