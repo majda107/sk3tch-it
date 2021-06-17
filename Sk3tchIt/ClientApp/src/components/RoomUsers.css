@@ -1,0 +1,6 @@
+.users {
+    display: grid;
+    justify-content: center;
+
+    max-width: 320px;
+}

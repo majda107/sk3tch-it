@@ -3,6 +3,8 @@ import { GameContext } from "../context/game.context";
 import { SignalrContext } from "../context/signalr.context";
 import { UsersContext } from "../context/users.context"
 
+import './RoomUsers.css'
+
 export function RoomUsers(): JSX.Element {
 
     const ctx = useContext(UsersContext);
@@ -16,7 +18,7 @@ export function RoomUsers(): JSX.Element {
         await signalrCtx.connection.invoke("ready", !me.ready);
     }
 
-    return <div>
+    return <div className="users">
         {/* <h2>Lobby users</h2> */}
 
         {

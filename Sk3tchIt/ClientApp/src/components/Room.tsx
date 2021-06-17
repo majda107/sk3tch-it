@@ -9,6 +9,8 @@ import { RoomChat } from "./RoomChat";
 import { RoomDrawing } from "./RoomDrawing";
 import { RoomUsers } from "./RoomUsers";
 
+import './Room.css'
+
 interface RouteParams {
     name: string
 }
@@ -56,7 +58,7 @@ export function Room(): JSX.Element {
     }
 
     return <div>
-        <span>Welcome in room {params.name}</span>
+        {/* <span>Welcome in room {params.name}</span> */}
 
         <RoomUsers />
 
