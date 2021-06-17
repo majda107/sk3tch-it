@@ -1,0 +1,18 @@
+.room {
+    display: grid;
+    grid-template-areas: "users drawing" "chat chat";
+
+    grid-template-columns: auto 1fr;
+}
+
+.room-users {
+    grid-area: users;
+}
+
+.room-drawing {
+    grid-area: drawing;
+}
+
+.room-chat {
+    grid-area: chat;
+}

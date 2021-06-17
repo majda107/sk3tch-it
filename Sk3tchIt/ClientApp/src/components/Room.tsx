@@ -57,19 +57,25 @@ export function Room(): JSX.Element {
         </div>
     }
 
-    return <div>
+    return <div className="room">
         {/* <span>Welcome in room {params.name}</span> */}
 
-        <RoomUsers />
+        <div className="room-users">
+            <RoomUsers />
+        </div>
 
-        <hr />
+        {/* <hr /> */}
 
-        <RoomDrawing />
+        <div className="room-drawing">
+            <RoomDrawing />
+        </div>
 
-        <hr />
+        {/* <hr /> */}
 
-        <RoomChat />
+        <div className="room-chat">
+            <RoomChat />
+            <button className="btn btn-small btn-secondary" onClick={leave}>Leave</button>
+        </div>
 
-        <button className="btn btn-small btn-secondary" onClick={leave}>Leave</button>
     </div>;
 }
