@@ -74,8 +74,9 @@ export function Room(): JSX.Element {
 
         <div className="room-chat">
             <RoomChat />
-            <button className="btn btn-small btn-secondary" onClick={leave}>Leave</button>
         </div>
+
+        <button className="btn btn-small btn-secondary" onClick={leave}>Leave</button>
 
     </div>;
 }

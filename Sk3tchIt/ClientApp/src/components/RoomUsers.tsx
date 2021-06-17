@@ -23,7 +23,7 @@ export function RoomUsers(): JSX.Element {
 
         {
             !gameCtx.running &&
-            <button onClick={toggleReady}>Ready</button>
+            <button onClick={toggleReady} className="btn btn-secondary">Ready</button>
         }
 
         <ul>

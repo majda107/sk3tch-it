@@ -30,8 +30,8 @@ export function RoomChat(): JSX.Element {
     }, [ctx.messages]);
 
 
-    return <div>
-        <ul className="chat" ref={chat}>
+    return <div className="chat">
+        <ul className="chat-messages" ref={chat}>
             {/* {ctx.messages.map(m => m.message).join()} */}
             {ctx.messages.map((m, i) => <li key={Math.random()}>
                 [{usersCtx.users.find(u => u.uid == m.uid)?.name ?? '-'}] {m.message}

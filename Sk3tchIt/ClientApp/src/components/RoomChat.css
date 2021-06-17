@@ -1,7 +1,36 @@
-.chat {
+.chat-messages {
     display: flex;
     flex-flow: column;
 
     height: 140px;
     overflow-y: scroll;
+
+    width: 100%;
+}
+
+.chat {
+    display: flex;
+    width: 100%;
+
+    flex-flow: column;
+}
+
+.chat > form {
+    display: grid;
+    grid-template-columns: auto auto;
+    column-gap: 12px;
+
+    width: min-content;
+}
+
+.chat > form > input,
+.chat > form > button {
+    height: 32px;
+}
+
+.chat > form > button {
+    padding: 0 14px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
