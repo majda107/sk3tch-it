@@ -10,14 +10,14 @@ export function Overlay(): JSX.Element | null {
     const overlay = useRef({} as HTMLDivElement);
 
 
-    useEffect(() => {
+    // useEffect(() => {
 
-        if (ctx.text)
-            gsap.from(overlay.current, { opacity: 0, duration: 0.5 });
-        else
-            gsap.from(overlay.current, { opacity: 1, duration: 0.5 });
+    //     if (ctx.text)
+    //         gsap.from(overlay.current, { opacity: 0, duration: 0.5 });
+    //     else
+    //         gsap.from(overlay.current, { opacity: 1, duration: 0.5 });
 
-    }, [ctx.text]);
+    // }, [ctx.text]);
 
 
     // if (!ctx.text) return null;
